@@ -10,6 +10,9 @@
 		"dist/**/*.js",
 		"src/*.js"
 	],
+	"directories": {
+		"example": "examples"
+	},
 	"scripts": {
 		"build": "npm run remove && npm run build:default && npm run build:modern",
 		"build:default": "npm run remove:default && npx cross-env IMPORT_POLYFILLS=1 npm run webpack",

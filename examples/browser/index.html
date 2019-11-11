@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+		<link rel="icon" href="favicon.ico" />
+		<title>vue-svg-inline-plugin browser example</title>
+		<style>
+			#app p:first-of-type { margin-bottom: 100vh; }
+			#app .logo { max-width: 10rem; }
+		</style>
+	</head>
+	<body>
+		<main id="app" v-show="true" style="display: none;">
+			<p>
+				{{ message }}
+			</p>
+			<p>
+				<img v-svg-inline class="logo img" data-src="images/logo.svg?1" alt="Vue logo 1" />
+				<br /><br /><br />
+				<img v-svg-inline-sprite class="logo img" data-src="images/logo.svg?2" alt="Vue logo 1/2" />
+				<br /><br /><br />
+				<img v-svg-inline-sprite class="logo img" data-src="images/logo.svg?2" alt="Vue logo 2/2" />
+			</p>
+		</main>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js"></script>
+		<script src="../../dist/vue-svg-inline-plugin.min.js"></script>
+		<script>
+			"use strict";
+
+			/* initialize vue plugin */
+			Vue.use(VueSvgInlinePlugin);
+
+			/* intialize vue app */
+			new Vue({
+				data: {
+					message: "↓↓↓ Scroll down and keep eye on DOM tree. ↓↓↓"
+				}
+			}).$mount("#app");
+		</script>
+	</body>
+</html>
