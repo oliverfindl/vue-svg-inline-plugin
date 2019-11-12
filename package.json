@@ -45,7 +45,7 @@
 	},
 	"homepage": "https://github.com/oliverfindl/vue-svg-inline-plugin#readme",
 	"dependencies": {
-		"core-js": "^3.4.0",
+		"core-js": "^3.4.1",
 		"intersection-observer": "^0.7.0",
 		"whatwg-fetch": "^3.0.0"
 	},
