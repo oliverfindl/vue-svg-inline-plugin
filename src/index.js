@@ -92,6 +92,10 @@ const install = (Vue = null, options = {}) => {
 			name: attribute.name.toString().trim().toLowerCase(),
 			value: attribute.value.toString().trim()
 		})) : options.attributes[option].map(attribute => attribute.toString().trim().toLowerCase());
+
+		/* cast option from array to set */
+		options.attributes[option] = new Set(options.attributes[option]);
+
 	}
 
 	/* cast xhtml option to boolean */
@@ -416,6 +420,9 @@ const install = (Vue = null, options = {}) => {
 			/* merge attribute maps */
 			attributes = new Map([...fileAttributes, ...nodeAttributes]);
 
+			/* store attribute names reference for attributes that should have unique values */
+			const uniqueAttributeValues = new Set(["class"]);
+
 			/* loop over all attributes to merge */
 			for(const attribute of options.attributes.merge) {
 
@@ -427,41 +434,38 @@ const install = (Vue = null, options = {}) => {
 				if(options.xhtml && !fileValues.length && !nodeValues.length) continue;
 
 				/* merge attribute values */
-				const mergedValues = [...new Set([].concat(fileValues, nodeValues))].join(" ");
+				const values = [...fileValues, ...nodeValues];
 
-				/* set merged attribute values to attribute map */
-				attributes.set(attribute, mergedValues);
+				/* set attribute values to attribute map */
+				attributes.set(attribute, (uniqueAttributeValues.has(attribute) ? [...new Set(values)] : values).join(" ").trim());
 
 			}
 
 			/* loop over all attributes to add */
 			for(const attribute of options.attributes.add) {
 
+				/* extract attribute values */
+				let values = attribute.value.split(PATTERN_WHITESPACE).filter(value => !!value);
+
 				/* check if attribute is already defined in attribute map */
 				if(attributes.has(attribute.name)) {
 
 					/* throw error if attribute to add already exists and can not be merged */
-					if(!options.attributes.merge.includes(attribute.name)) throw new Error(`Can not add attribute, attribute already exists. [${attribute.name}]`);
+					if(!options.attributes.merge.has(attribute.name)) throw new Error(`Can not add attribute, attribute already exists. [${attribute.name}]`);
 
 					/* extract attribute values */
-					const values = attributes.has(attribute.name) ? attributes.get(attribute.name).split(PATTERN_WHITESPACE).filter(value => !!value) : [];
-					const newValues = attribute.value.split(PATTERN_WHITESPACE).filter(value => !!value);
+					const oldValues = attributes.get(attribute.name).split(PATTERN_WHITESPACE).filter(value => !!value);
 
 					/* skip loop if xhtml option is enabled and there are not any values */
-					if(options.xhtml && !values.length && !newValues.length) continue;
+					if(options.xhtml && !values.length && !oldValues.length) continue;
 
 					/* merge attribute values */
-					const mergedValues = [...new Set([].concat(values, newValues))].join(" ");
-
-					/* set merged attribute values to attribute map */
-					attributes.set(attribute.name, mergedValues);
-
-				} else {
-
-					/* set attribute value to attribute map */
-					attributes.set(attribute.name, attribute.value.split(PATTERN_WHITESPACE).filter(value => !!value).join(" "));
+					values = [...oldValues, ...values];
 
 				}
+
+				/* set attribute values to attribute map */
+				attributes.set(attribute.name, (uniqueAttributeValues.has(attribute.name) ? [...new Set(values)] : values).join(" ").trim());
 
 			}
 
@@ -471,6 +475,9 @@ const install = (Vue = null, options = {}) => {
 				/* skip if attribute is not defined in attribute map */
 				if(!attributes.has(attribute)) continue;
 
+				/* extract attribute values */
+				let values = attributes.get(attribute).split(PATTERN_WHITESPACE).filter(value => !!value);
+
 				/* store data-attribute name reference */
 				const dataAttribute = `data-${attribute}`;
 
@@ -478,33 +485,24 @@ const install = (Vue = null, options = {}) => {
 				if(attributes.has(dataAttribute)) {
 
 					/* throw error if data-attribute already exists and can not be merged */
-					if(!options.attributes.merge.includes(dataAttribute)) throw new Error(`Can not transform attribute to data-attribute, data-attribute already exists. [${attribute}]`);
+					if(!options.attributes.merge.has(dataAttribute)) throw new Error(`Can not transform attribute to data-attribute, data-attribute already exists. [${attribute}]`);
 
-					/* extract attribute values */
-					const values = attributes.has(dataAttribute) ? attributes.get(dataAttribute).split(PATTERN_WHITESPACE).filter(value => !!value) : [];
-					const newValues = attributes.has(attribute) ? attributes.get(attribute).split(PATTERN_WHITESPACE).filter(value => !!value) : [];
+					/* extract data-attribute values */
+					const oldValues = attributes.get(dataAttribute).split(PATTERN_WHITESPACE).filter(value => !!value);
 
 					/* skip loop if xhtml option is enabled and there are not any values */
-					if(options.xhtml && !values.length && !newValues.length) continue;
+					if(options.xhtml && !values.length && !oldValues.length) continue;
 
 					/* merge attribute values */
-					const mergedValues = [...new Set([].concat(values, newValues))].join(" ");
-
-					/* set data-attribute to attribute map */
-					attributes.set(dataAttribute, mergedValues);
-
-				} else {
-
-					/* store attribute value reference */
-					const value = attributes.get(attribute);
-
-					/* set data-attribute to attribute map */
-					attributes.set(dataAttribute, value.split(PATTERN_WHITESPACE).filter(value => !!value).join(" "));
+					values = [...oldValues, ...values];
 
 				}
 
-				/* push attribute to remove from attribute map into options.attributes.remove array if there is not already present */
-				if(!options.attributes.remove.includes(attribute)) options.attributes.remove.push(attribute);
+				/* set data-attribute values to attribute map */
+				attributes.set(dataAttribute, (uniqueAttributeValues.has(attribute) ? [...new Set(values)] : values).join(" ").trim());
+
+				/* add attribute to remove from attribute map into options.attributes.remove set if there is not already present */
+				if(!options.attributes.remove.has(attribute)) options.attributes.remove.add(attribute);
 
 			}
 
