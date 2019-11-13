@@ -113,34 +113,63 @@ const install = (Vue = null, options = {}) => {
 	/* throw error if fetch and axios are not available */
 	if(!options._fetch && !options._axios) throw new Error("Feature is not supported by browser! [fetch || axios]");
 
+	/*  check IntersectionObserver is available */
+	options._observer = "IntersectionObserver" in window;
+
 	/* create empty cache map */
 	const cache = new Map;
 
 	/* create empty symbol set */
 	const symbols = new Set;
 
-	/* create intersection observer */
-	const observer = new IntersectionObserver((entries, observer) => {
+	/* store svg symbol intersection observer reference */
+	let observerRef;
 
-		/* loop over all observer entries */
-		for(const entry of entries) {
+	/**
+	 * Create SVG symbol intersection observer.
+	 * @returns {IntersectionObserver} SVG symbol intersection observer.
+	 */
+	const createSvgSymbolIntersectionObserver = () => {
 
-			/* skip if entry is not intersecting */
-			if(!entry.isIntersecting) continue;
+		/* throw error if intersection observer is not available in browser */
+		if(!options._observer) throw new Error("Feature is not supported by browser! [IntersectionObserver]");
 
-			/* store node reference */
-			const node = entry.target;
+		/* throw error if SVG symbol container node already exists */
+		if(observerRef) throw new Error("Can not create SVG symbol intersection observer, intersection observer already exists!");
 
-			/* process node */
-			processNode(node);
+		/* return intersection observer */
+		return new IntersectionObserver((entries, observer) => {
 
-			/* stop observing node */
-			observer.unobserve(node);
+			/* loop over all observer entries */
+			for(const entry of entries) {
 
-		}
+				/* skip if entry is not intersecting */
+				if(!entry.isIntersecting) continue;
 
-	});
+				/* store node reference */
+				const node = entry.target;
 
+				/* process node */
+				processNode(node);
+
+				/* stop observing node */
+				observer.unobserve(node);
+
+			}
+
+		});
+
+	};
+
+	/**
+	 * Return SVG symbol intersection observer reference.
+	 * @returns {IntersectionObserver} SVG symbol intersection observer reference.
+	 */
+	const getSvgSymbolIntersectionObserver = () => {
+
+		return observerRef || (observerRef = createSvgSymbolIntersectionObserver());
+
+	};
 	/* reference for svg symbol container node */
 	let containerRef;
 
@@ -601,7 +630,7 @@ const install = (Vue = null, options = {}) => {
 		node._sprite = vnode.data.directives.pop().name === options.directives.inlineSprite;
 
 		/* observe node if data-src is defined otherwise process node */
-		if(node.dataset.src) observer.observe(node);
+		if(node.dataset.src) getSvgSymbolIntersectionObserver().observe(node);
 		else processNode(node);
 
 		/* update internal _processed flag */
