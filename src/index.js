@@ -53,7 +53,10 @@ const PATTERN_WHITESPACE = /\s+/g;
 const PATTERN_TEMPLATE_LITERALS_WHITESPACE = /[\n\t]+/g;
 
 /* define correct response statuses */
-const RESPONSE_STATUS_OK = [200, 204, 304];
+const CORRECT_RESPONSE_STATUSES = new Set([
+	200, // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/200
+	304 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/304
+]);
 
 /**
  * Install method for Vue plugin.
@@ -101,8 +104,14 @@ const install = (Vue = null, options = {}) => {
 	/* cast xhtml option to boolean */
 	options.xhtml = !!options.xhtml;
 
-	/* check if axios library is available */
+	/* check if fetch is available */
+	options._fetch = "fetch" in window;
+
+	/* check if axios is available */
 	options._axios = "axios" in window;
+
+	/* throw error if fetch and axios are not available */
+	if(!options._fetch && !options._axios) throw new Error("Feature is not supported by browser! [fetch || axios]");
 
 	/* create empty cache map */
 	const cache = new Map;
@@ -295,7 +304,7 @@ const install = (Vue = null, options = {}) => {
 				.then(response => {
 
 					/* throw error if response status is wrong */
-					if(!RESPONSE_STATUS_OK.includes(response.status | 0)) throw new Error(`Wrong response status! [response.status=${response.status}]`);
+					if(!CORRECT_RESPONSE_STATUSES.has(response.status | 0)) throw new Error(`Wrong response status! [response.status=${response.status}]`);
 
 					/* return response data as string */
 					return options._axios ? response.data.toString() : response.text();
