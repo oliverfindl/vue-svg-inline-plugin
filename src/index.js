@@ -170,7 +170,8 @@ const install = (Vue = null, options = {}) => {
 		return observerRef || (observerRef = createSvgSymbolIntersectionObserver());
 
 	};
-	/* reference for svg symbol container node */
+
+	/* store svg symbol container node reference */
 	let containerRef;
 
 	/**
@@ -180,7 +181,7 @@ const install = (Vue = null, options = {}) => {
 	const createSvgSymbolContainer = () => {
 
 		/* throw error if SVG symbol container node already exists */
-		if(containerRef) throw new Error("Can not create SVG symbol container node, node already exists!");
+		if(containerRef) throw new Error("Can not create SVG symbol container node, container node already exists!");
 
 		/* create svg symbol container node */
 		const container = createNode(`<svg xmlns="http://www.w3.org/2000/svg" id="${CONTAINER_ID}" style="display: none !important;"></svg>`);
@@ -189,7 +190,7 @@ const install = (Vue = null, options = {}) => {
 		document.body.appendChild(container);
 
 		/* return svg symbol container node reference */
-		return getSvgSymbolContainer();
+		return document.getElementById(CONTAINER_ID);
 
 	};
 
@@ -200,7 +201,7 @@ const install = (Vue = null, options = {}) => {
 	const getSvgSymbolContainer = () => {
 
 		/* return svg symbol container node reference */
-		return containerRef ? containerRef : (containerRef = document.getElementById(CONTAINER_ID)); // eslint-disable-line no-cond-assign
+		return containerRef || (containerRef = createSvgSymbolContainer());
 
 	};
 
@@ -420,11 +421,8 @@ const install = (Vue = null, options = {}) => {
 						</svg>
 					`);
 
-					/* store svg symbol container node reference */
-					const container = getSvgSymbolContainer() || createSvgSymbolContainer();
-
 					/* add new symbol node into svg symbol container node */
-					container.appendChild(symbolNode.firstChild.firstChild);
+					getSvgSymbolContainer().appendChild(symbolNode.firstChild.firstChild);
 
 					/* store svg file path in symbol set */
 					symbols.add(file.path);
