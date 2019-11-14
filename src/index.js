@@ -6,11 +6,12 @@
 
 "use strict";
 
+/* define PACKAGE_NAME constant */
+const PACKAGE_NAME = "vue-svg-inline-plugin";
+
 /* import polyfills if requested */
 // It is not possible to perform conditional import, so we use require syntax instead.
 // if(typeof IMPORT_POLYFILLS !== "undefined" && !!IMPORT_POLYFILLS) import "./polyfills"; // eslint-disable-line no-extra-boolean-cast
-
-/* require polyfills if requested */
 if(typeof IMPORT_POLYFILLS !== "undefined" && !!IMPORT_POLYFILLS) require("./polyfills"); // eslint-disable-line no-extra-boolean-cast
 
 /* define default options object */
@@ -37,8 +38,11 @@ const DEFAULT_OPTIONS = {
 	xhtml: false
 };
 
+/* define id for image node flags */
+const FLAGS_ID = `${PACKAGE_NAME}-flags`;
+
 /* define id for svg symbol */
-const SYMBOL_ID = "vue-svg-inline-plugin-sprite"; // + `-<NUMBER>` - will be added dynamically
+const SYMBOL_ID = `${PACKAGE_NAME}-sprite`; // + `-<NUMBER>` - will be added dynamically
 
 /* define id for svg symbol container */
 const CONTAINER_ID = `${SYMBOL_ID}-container`;
@@ -113,8 +117,13 @@ const install = (Vue = null, options = {}) => {
 	/* throw error if fetch and axios are not available */
 	if(!options._fetch && !options._axios) throw new Error("Feature is not supported by browser! [fetch || axios]");
 
-	/*  check IntersectionObserver is available */
+	/* check if intersection observer is available */
 	options._observer = "IntersectionObserver" in window;
+
+	/* throw error if intersection observer is not available */
+	// We log error instead and disable lazy processing of image nodes in processing function.
+	// if(!options._observer) throw new Error("Feature is not supported by browser! [IntersectionObserver]");
+	if(!options._observer) console.error("Feature is not supported by browser! Disabling lazy processing of image nodes. [IntersectionObserver]"); // eslint-disable-line no-console
 
 	/* create empty cache map */
 	const cache = new Map;
@@ -122,20 +131,20 @@ const install = (Vue = null, options = {}) => {
 	/* create empty symbol set */
 	const symbols = new Set;
 
-	/* store svg symbol intersection observer reference */
+	/* store image node intersection observer reference */
 	let observerRef;
 
 	/**
-	 * Create SVG symbol intersection observer.
-	 * @returns {IntersectionObserver} SVG symbol intersection observer.
+	 * Create image node intersection observer.
+	 * @returns {IntersectionObserver} Image node intersection observer.
 	 */
-	const createSvgSymbolIntersectionObserver = () => {
+	const createImageNodeIntersectionObserver = () => {
 
 		/* throw error if intersection observer is not available in browser */
 		if(!options._observer) throw new Error("Feature is not supported by browser! [IntersectionObserver]");
 
-		/* throw error if SVG symbol container node already exists */
-		if(observerRef) throw new Error("Can not create SVG symbol intersection observer, intersection observer already exists!");
+		/* throw error if image node intersection observer already exists */
+		if(observerRef) throw new Error("Can not create image node intersection observer, intersection observer already exists!");
 
 		/* return intersection observer */
 		return new IntersectionObserver((entries, observer) => {
@@ -146,13 +155,13 @@ const install = (Vue = null, options = {}) => {
 				/* skip if entry is not intersecting */
 				if(!entry.isIntersecting) continue;
 
-				/* store node reference */
+				/* store image node reference */
 				const node = entry.target;
 
-				/* process node */
-				processNode(node);
+				/* process image node */
+				processImageNode(node);
 
-				/* stop observing node */
+				/* stop observing image node */
 				observer.unobserve(node);
 
 			}
@@ -162,12 +171,12 @@ const install = (Vue = null, options = {}) => {
 	};
 
 	/**
-	 * Return SVG symbol intersection observer reference.
-	 * @returns {IntersectionObserver} SVG symbol intersection observer reference.
+	 * Return image node intersection observer reference.
+	 * @returns {IntersectionObserver} Image node intersection observer reference.
 	 */
-	const getSvgSymbolIntersectionObserver = () => {
+	const getImageNodeIntersectionObserver = () => {
 
-		return observerRef || (observerRef = createSvgSymbolIntersectionObserver());
+		return observerRef || (observerRef = createImageNodeIntersectionObserver());
 
 	};
 
@@ -306,6 +315,9 @@ const install = (Vue = null, options = {}) => {
 	 */
 	const fetchSvgFile = (path = "") => {
 
+		/* throw error if fetch and axios are not available */
+		if(!options._fetch && !options._axios) throw new Error("Feature is not supported by browser! [fetch || axios]");
+
 		/* throw error if path argument is missing */
 		if(!path) throw new Error("Missing required argument! [path]");
 
@@ -397,8 +409,8 @@ const install = (Vue = null, options = {}) => {
 		/* throw error if node argument is missing outerHTML property */
 		if(!node.outerHTML) throw new Error("Missing required argument property! [node.outerHTML]");
 
-		/* handle svg inline sprites */
-		if(!!node._sprite) { // eslint-disable-line no-extra-boolean-cast
+		/* check if image node should be handled as svg inline sprite */
+		if(node[FLAGS_ID].has("sprite")) {
 
 			/* replace svg file content with symbol usage reference, which will be defined in svg symbol container node */
 			file.content = file.content.replace(PATTERN_SVG_CONTENT, (svg, attributes, symbol) => { // eslint-disable-line no-unused-vars
@@ -565,16 +577,16 @@ const install = (Vue = null, options = {}) => {
 	};
 
 	/**
-	 * Replace image node with SVG node.
+	 * Process image node - replace image node with SVG node.
 	 * @param {HTMLImageElement} node - Image node.
 	 * @returns {*}
 	 */
-	const processNode = (node = null) => {
+	const processImageNode = (node = null) => {
 
 		/* throw error if node argument is missing */
 		if(!node) throw new Error("Missing required argument! [node]");
 
-		/* throw error if node argument is missing data-src or src property */
+		/* throw error if node argument is missing data-src and src property */
 		if(!node.dataset.src && !node.src) throw new Error("Missing required argument property! [node.data-src || node.src]");
 
 		/* cast data-src and src properties of node argument argument to strings if defined */
@@ -604,7 +616,7 @@ const install = (Vue = null, options = {}) => {
 	};
 
 	/**
-	 * Bind hook for Vue directive.
+	 * Bind hook function for Vue directive.
 	 * @param {HTMLImageElement} node - Node that is binded with directive.
 	 * @param {Object} binding - Object containing directive properties.
 	 * @param {VNode} vnode - Virtual node created by Vue compiler.
@@ -618,21 +630,33 @@ const install = (Vue = null, options = {}) => {
 		/* throw error if vnode argument is missing */
 		if(!vnode) throw new Error("Missing required argument! [vnode]");
 
-		/* skip if node is already processed */
-		if(!!node._processed) return; // eslint-disable-line no-extra-boolean-cast
+		/* create empty image node flag set if it is not already defined */
+		if(!node[FLAGS_ID]) node[FLAGS_ID] = new Set;
 
-		/* throw error if node has more than 1 directive */
+		/* skip if image node is already processed */
+		if(node[FLAGS_ID].has("processed")) return;
+
+		/* set internal processed flag to image node */
+		node[FLAGS_ID].add("processed");
+
+		/* throw error if image node has more than 1 directive */
 		if(vnode.data.directives.length > 1) throw new Error(`Node has more than 1 directive! [vnode.data.directives=${JSON.stringify(vnode.data.directives.map(directive => directive.name))}]`);
 
-		/* set internal _sprite flag */
-		node._sprite = vnode.data.directives.pop().name === options.directives.inlineSprite;
+		/* set internal sprite flag to image node */
+		if(vnode.data.directives.pop().name === options.directives.inlineSprite) node[FLAGS_ID].add("sprite");
 
-		/* observe node if data-src is defined otherwise process node */
-		if(node.dataset.src) getSvgSymbolIntersectionObserver().observe(node);
-		else processNode(node);
+		/* disable lazy processing of image node if intersection observer is not available */
+		if(!options._observer && node.dataset.src) {
 
-		/* update internal _processed flag */
-		node._processed = true;
+			/* transform data-src attribute to src attribute of image node */
+			node.src = node.dataset.src;
+			delete node.dataset.src;
+
+		}
+
+		/* process image node */
+		if(node.dataset.src) getImageNodeIntersectionObserver().observe(node);
+		else processImageNode(node);
 
 	};
 
