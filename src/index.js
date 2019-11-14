@@ -81,7 +81,7 @@ const install = (Vue = null, options = {}) => {
 		options.directives[option] = options.directives[option].toString().trim().toLowerCase();
 
 		/* throw error if directive option is not valid */
-		if(!PATTERN_ATTRIBUTE_NAME.test(options.directives[option])) throw new TypeError(`Option is not valid! [options.directives.${option}="${options.directives[option]}"]`);
+		if(!PATTERN_ATTRIBUTE_NAME.test(options.directives[option])) throw new TypeError(`[${PACKAGE_NAME}] Option is not valid! [options.directives.${option}="${options.directives[option]}"]`);
 
 		/* remove starting `v-` from directive option */
 		options.directives[option] = options.directives[option].replace(PATTERN_VUE_DIRECTIVE, "");
@@ -92,7 +92,7 @@ const install = (Vue = null, options = {}) => {
 	for(const option in options.attributes) {
 
 		/* throw error if option is not valid */
-		if(!Array.isArray(options.attributes[option])) throw new TypeError(`Option is not valid! [options.attributes.${option}=${JSON.stringify(options.attributes[option])}]`);
+		if(!Array.isArray(options.attributes[option])) throw new TypeError(`[${PACKAGE_NAME}] Option is not valid! [options.attributes.${option}=${JSON.stringify(options.attributes[option])}]`);
 
 		/* cast option values to strings */
 		options.attributes[option] = option === "add" ? options.attributes[option].map(attribute => ({
@@ -115,15 +115,15 @@ const install = (Vue = null, options = {}) => {
 	options._axios = "axios" in window;
 
 	/* throw error if fetch and axios are not available */
-	if(!options._fetch && !options._axios) throw new Error("Feature is not supported by browser! [fetch || axios]");
+	if(!options._fetch && !options._axios) throw new Error(`[${PACKAGE_NAME}] Feature is not supported by browser! [fetch || axios]`);
 
 	/* check if intersection observer is available */
 	options._observer = "IntersectionObserver" in window;
 
 	/* throw error if intersection observer is not available */
 	// We log error instead and disable lazy processing of image nodes in processing function.
-	// if(!options._observer) throw new Error("Feature is not supported by browser! [IntersectionObserver]");
-	if(!options._observer) console.error("Feature is not supported by browser! Disabling lazy processing of image nodes. [IntersectionObserver]"); // eslint-disable-line no-console
+	// if(!options._observer) throw new Error(`[${PACKAGE_NAME}] Feature is not supported by browser! [IntersectionObserver]`);
+	if(!options._observer) console.error(`[${PACKAGE_NAME}] Feature is not supported by browser! Disabling lazy processing of image nodes. [IntersectionObserver]`); // eslint-disable-line no-console
 
 	/* create empty cache map */
 	const cache = new Map;
@@ -141,10 +141,10 @@ const install = (Vue = null, options = {}) => {
 	const createImageNodeIntersectionObserver = () => {
 
 		/* throw error if intersection observer is not available in browser */
-		if(!options._observer) throw new Error("Feature is not supported by browser! [IntersectionObserver]");
+		if(!options._observer) throw new Error(`[${PACKAGE_NAME}] Feature is not supported by browser! [IntersectionObserver]`);
 
 		/* throw error if image node intersection observer already exists */
-		if(observerRef) throw new Error("Can not create image node intersection observer, intersection observer already exists!");
+		if(observerRef) throw new Error(`[${PACKAGE_NAME}] Can not create image node intersection observer, intersection observer already exists!`);
 
 		/* return intersection observer */
 		return new IntersectionObserver((entries, observer) => {
@@ -190,7 +190,7 @@ const install = (Vue = null, options = {}) => {
 	const createSvgSymbolContainer = () => {
 
 		/* throw error if SVG symbol container node already exists */
-		if(containerRef) throw new Error("Can not create SVG symbol container node, container node already exists!");
+		if(containerRef) throw new Error(`[${PACKAGE_NAME}] Can not create SVG symbol container node, container node already exists!`);
 
 		/* create svg symbol container node */
 		const container = createNode(`<svg xmlns="http://www.w3.org/2000/svg" id="${CONTAINER_ID}" style="display: none !important;"></svg>`);
@@ -222,13 +222,13 @@ const install = (Vue = null, options = {}) => {
 	const createNode = (string = "") => {
 
 		/* throw error if string argument is missing */
-		if(!string) throw new Error("Missing required argument! [string]");
+		if(!string) throw new Error(`[${PACKAGE_NAME}] Missing required argument! [string]`);
 
 		/* cast string argument to string */
 		string = string.toString().trim();
 
 		/* throw error if string argument is not valid */
-		if(!string.startsWith("<") || !string.endsWith(">")) throw new TypeError(`Argument is not valid! [string="${string}"]`);
+		if(!string.startsWith("<") || !string.endsWith(">")) throw new TypeError(`[${PACKAGE_NAME}] Argument is not valid! [string="${string}"]`);
 
 		/* remove unncessary whitespace from string argument */
 		string = string.replace(PATTERN_TEMPLATE_LITERALS_WHITESPACE, "");
@@ -247,13 +247,13 @@ const install = (Vue = null, options = {}) => {
 	const replaceNode = (node = null, newNode = null) => {
 
 		/* throw error if node argument is missing */
-		if(!node) throw new Error("Missing required argument! [node]");
+		if(!node) throw new Error(`[${PACKAGE_NAME}] Missing required argument! [node]`);
 
 		/* throw error if newNode argument is missing */
-		if(!newNode) throw new Error("Missing required argument! [newNode]");
+		if(!newNode) throw new Error(`[${PACKAGE_NAME}] Missing required argument! [newNode]`);
 
 		/* throw error if node argument is missing parentNode property */
-		if(!node.parentNode) throw new Error("Missing required argument property! [node.parentNode]");
+		if(!node.parentNode) throw new Error(`[${PACKAGE_NAME}] Missing required argument property! [node.parentNode]`);
 
 		/* replace node with new node */
 		node.parentNode.replaceChild(newNode, node);
@@ -268,7 +268,7 @@ const install = (Vue = null, options = {}) => {
 	const createAttributeMap = (string = "") => {
 
 		/* throw error if string argument is missing */
-		if(!string) throw new Error("Missing required argument! [string]");
+		if(!string) throw new Error(`[${PACKAGE_NAME}] Missing required argument! [string]`);
 
 		/* cast string argument to string */
 		string = string.toString().trim();
@@ -293,7 +293,7 @@ const install = (Vue = null, options = {}) => {
 			if(!name || name.startsWith("<") || name.endsWith(">")) continue;
 
 			/* throw error if attribute name is not valid */
-			if(!PATTERN_ATTRIBUTE_NAME.test(name)) throw new TypeError(`Attribute name is not valid! [attribute="${name}"]`);
+			if(!PATTERN_ATTRIBUTE_NAME.test(name)) throw new TypeError(`[${PACKAGE_NAME}] Attribute name is not valid! [attribute="${name}"]`);
 
 			/* store attribute value reference */
 			const value = (attribute[2] || attribute[3] || "").trim();
@@ -316,16 +316,16 @@ const install = (Vue = null, options = {}) => {
 	const fetchSvgFile = (path = "") => {
 
 		/* throw error if fetch and axios are not available */
-		if(!options._fetch && !options._axios) throw new Error("Feature is not supported by browser! [fetch || axios]");
+		if(!options._fetch && !options._axios) throw new Error(`[${PACKAGE_NAME}] Feature is not supported by browser! [fetch || axios]`);
 
 		/* throw error if path argument is missing */
-		if(!path) throw new Error("Missing required argument! [path]");
+		if(!path) throw new Error(`[${PACKAGE_NAME}] Missing required argument! [path]`);
 
 		/* cast path argument to string */
 		path = path.toString().trim();
 
 		/* throw error if path argument is not valid */
-		if(!PATTERN_SVG_FILENAME.test(path)) throw new TypeError(`Argument is not valid! [path="${path}"]`);
+		if(!PATTERN_SVG_FILENAME.test(path)) throw new TypeError(`[${PACKAGE_NAME}] Argument is not valid! [path="${path}"]`);
 
 		/* return promise */
 		return new Promise((resolve, reject) => {
@@ -346,7 +346,7 @@ const install = (Vue = null, options = {}) => {
 				.then(response => {
 
 					/* throw error if response status is wrong */
-					if(!CORRECT_RESPONSE_STATUSES.has(response.status | 0)) throw new Error(`Wrong response status! [response.status=${response.status}]`);
+					if(!CORRECT_RESPONSE_STATUSES.has(response.status | 0)) throw new Error(`Wrong response status! [response.status=${response.status}]`); // PACKAGE_NAME prefix is not required here, it will be added in reject handler.
 
 					/* return response data as string */
 					return options._axios ? response.data.toString() : response.text();
@@ -383,31 +383,31 @@ const install = (Vue = null, options = {}) => {
 	const parseSvgFile = (file = null, node = null) => {
 
 		/* throw error if file argument is missing */
-		if(!file) throw new Error("Missing required argument! [file]");
+		if(!file) throw new Error(`[${PACKAGE_NAME}] Missing required argument! [file]`);
 
 		/* throw error if node argument is missing */
-		if(!node) throw new Error("Missing required argument! [node]");
+		if(!node) throw new Error(`[${PACKAGE_NAME}] Missing required argument! [node]`);
 
 		/* throw error if file argument is missing path property */
-		if(!file.path) throw new Error("Missing required argument property! [file.path]");
+		if(!file.path) throw new Error(`[${PACKAGE_NAME}] Missing required argument property! [file.path]`);
 
 		/* cast path property of file argument to string */
 		file.path = file.path.toString().trim();
 
 		/* throw error if path property of file argument is not valid */
-		if(!PATTERN_SVG_FILENAME.test(file.path)) throw new TypeError(`Argument property is not valid! [file.path="${file.path}"]`);
+		if(!PATTERN_SVG_FILENAME.test(file.path)) throw new TypeError(`[${PACKAGE_NAME}] Argument property is not valid! [file.path="${file.path}"]`);
 
 		/* throw error if file argument is missing content property */
-		if(!file.content) throw new Error("Missing required argument property! [file.content]");
+		if(!file.content) throw new Error(`[${PACKAGE_NAME}] Missing required argument property! [file.content]`);
 
 		/* cast content property of file argument to string */
 		file.content = file.content.toString().trim();
 
 		/* throw error if content property of file argument is not valid */
-		if(!PATTERN_SVG_CONTENT.test(file.content)) throw new TypeError(`Argument property is not valid! [file.content="${file.content}"]`);
+		if(!PATTERN_SVG_CONTENT.test(file.content)) throw new TypeError(`[${PACKAGE_NAME}] Argument property is not valid! [file.content="${file.content}"]`);
 
 		/* throw error if node argument is missing outerHTML property */
-		if(!node.outerHTML) throw new Error("Missing required argument property! [node.outerHTML]");
+		if(!node.outerHTML) throw new Error(`[${PACKAGE_NAME}] Missing required argument property! [node.outerHTML]`);
 
 		/* check if image node should be handled as svg inline sprite */
 		if(node[FLAGS_ID].has("sprite")) {
@@ -499,7 +499,7 @@ const install = (Vue = null, options = {}) => {
 				if(attributes.has(attribute.name)) {
 
 					/* throw error if attribute to add already exists and can not be merged */
-					if(!options.attributes.merge.has(attribute.name)) throw new Error(`Can not add attribute, attribute already exists. [${attribute.name}]`);
+					if(!options.attributes.merge.has(attribute.name)) throw new Error(`[${PACKAGE_NAME}] Can not add attribute, attribute already exists. [${attribute.name}]`);
 
 					/* extract attribute values */
 					const oldValues = attributes.get(attribute.name).split(PATTERN_WHITESPACE).filter(value => !!value);
@@ -533,7 +533,7 @@ const install = (Vue = null, options = {}) => {
 				if(attributes.has(dataAttribute)) {
 
 					/* throw error if data-attribute already exists and can not be merged */
-					if(!options.attributes.merge.has(dataAttribute)) throw new Error(`Can not transform attribute to data-attribute, data-attribute already exists. [${attribute}]`);
+					if(!options.attributes.merge.has(dataAttribute)) throw new Error(`[${PACKAGE_NAME}] Can not transform attribute to data-attribute, data-attribute already exists. [${attribute}]`);
 
 					/* extract data-attribute values */
 					const oldValues = attributes.get(dataAttribute).split(PATTERN_WHITESPACE).filter(value => !!value);
@@ -584,10 +584,10 @@ const install = (Vue = null, options = {}) => {
 	const processImageNode = (node = null) => {
 
 		/* throw error if node argument is missing */
-		if(!node) throw new Error("Missing required argument! [node]");
+		if(!node) throw new Error(`[${PACKAGE_NAME}] Missing required argument! [node]`);
 
 		/* throw error if node argument is missing data-src and src property */
-		if(!node.dataset.src && !node.src) throw new Error("Missing required argument property! [node.data-src || node.src]");
+		if(!node.dataset.src && !node.src) throw new Error(`[${PACKAGE_NAME}] Missing required argument property! [node.data-src || node.src]`);
 
 		/* cast data-src and src properties of node argument argument to strings if defined */
 		if(node.dataset.src) node.dataset.src = node.dataset.src.toString().trim();
@@ -611,7 +611,7 @@ const install = (Vue = null, options = {}) => {
 			})
 
 			/* catch errors */
-			.catch(console.error); // eslint-disable-line no-console
+			.catch(error => console.error(`[${PACKAGE_NAME}] ${error.toString()}`)); // eslint-disable-line no-console
 
 	};
 
@@ -625,10 +625,10 @@ const install = (Vue = null, options = {}) => {
 	const bind = (node = null, binding = null, vnode = null) => { // eslint-disable-line no-unused-vars
 
 		/* throw error if node argument is missing */
-		if(!node) throw new Error("Missing required argument! [node]");
+		if(!node) throw new Error(`[${PACKAGE_NAME}] Missing required argument! [node]`);
 
 		/* throw error if vnode argument is missing */
-		if(!vnode) throw new Error("Missing required argument! [vnode]");
+		if(!vnode) throw new Error(`[${PACKAGE_NAME}] Missing required argument! [vnode]`);
 
 		/* create empty image node flag set if it is not already defined */
 		if(!node[FLAGS_ID]) node[FLAGS_ID] = new Set;
@@ -640,7 +640,7 @@ const install = (Vue = null, options = {}) => {
 		node[FLAGS_ID].add("processed");
 
 		/* throw error if image node has more than 1 directive */
-		if(vnode.data.directives.length > 1) throw new Error(`Node has more than 1 directive! [vnode.data.directives=${JSON.stringify(vnode.data.directives.map(directive => directive.name))}]`);
+		if(vnode.data.directives.length > 1) throw new Error(`[${PACKAGE_NAME}] Node has more than 1 directive! [vnode.data.directives=${JSON.stringify(vnode.data.directives.map(directive => directive.name))}]`);
 
 		/* set internal sprite flag to image node */
 		if(vnode.data.directives.pop().name === options.directives.inlineSprite) node[FLAGS_ID].add("sprite");
