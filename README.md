@@ -1,8 +1,8 @@
 # vue-svg-inline-plugin
 
-[![version](https://img.shields.io/npm/v/vue-svg-inline-plugin.svg?style=flat)](https://www.npmjs.com/package/vue-svg-inline-plugin)
-[![downloads](https://img.shields.io/npm/dt/vue-svg-inline-plugin.svg?style=flat)](https://www.npmjs.com/package/vue-svg-inline-plugin)
-![license](https://img.shields.io/npm/l/vue-svg-inline-plugin.svg?style=flat)
+[![version](https://img.shields.io/npm/v/vue-svg-inline-plugin.svg?style=flat)][npm]
+[![downloads](https://img.shields.io/npm/dt/vue-svg-inline-plugin.svg?style=flat)][npm]
+[![license](https://img.shields.io/npm/l/vue-svg-inline-plugin.svg?style=flat)][mit]
 [![paypal](https://img.shields.io/badge/donate-paypal-blue.svg?colorB=0070ba&style=flat)](https://paypal.me/oliverfindl)
 
 [Vue][vue] plugin for inline replacement of SVG images with actual content of SVG files.
@@ -26,7 +26,7 @@
 
 ### Package managers
 
-* [npm](https://npmjs.com/) [[package](https://www.npmjs.com/package/vue-svg-inline-plugin)]:
+* [npm](https://npmjs.com/) [[package][npm]]:
 ```bash
 $ npm install vue-svg-inline-plugin --save
 ```
@@ -224,8 +224,10 @@ Boolean. In XHTML mode attribute minimization is forbidden. Empty attributes are
 
 ## License
 
-[MIT](http://opensource.org/licenses/MIT)
+[MIT][mit]
 
+[mit]: https://opensource.org/licenses/MIT
+[npm]: https://www.npmjs.com/package/vue-svg-inline-plugin
 [vue]: https://github.com/vuejs/vue
 [vue-cli]: https://github.com/vuejs/vue-cli
 [webpack]: https://github.com/webpack/webpack
