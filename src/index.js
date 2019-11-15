@@ -9,6 +9,9 @@
 /* define PACKAGE_NAME constant */
 const PACKAGE_NAME = "vue-svg-inline-plugin";
 
+/* define PACKAGE_VERSION constant */
+const PACKAGE_VERSION = "1.0.0";
+
 /* import polyfills if requested */
 // It is not possible to perform conditional import, so we use require syntax instead.
 // if(typeof IMPORT_POLYFILLS !== "undefined" && !!IMPORT_POLYFILLS) import "./polyfills"; // eslint-disable-line no-extra-boolean-cast
@@ -35,6 +38,11 @@ const DEFAULT_OPTIONS = {
 		data: [],
 		remove: ["alt", "src", "data-src"]
 	},
+	cache: {
+		version: PACKAGE_VERSION,
+		persistent: true,
+		removeRevisions: true
+	},
 	xhtml: false
 };
 
@@ -43,6 +51,10 @@ const OBSERVER_REF_ID = "observer";
 
 /* define reference id for svg symbol container node */
 const CONTAINER_REF_ID = "container";
+
+/* define id for cache map local storage key */
+// Will be defined dynamically based on supplied options.cache.version string or number.
+// const CACHE_ID = `${PACKAGE_NAME}:${PACKAGE_VERSION}`;
 
 /* define id for image node flags */
 const FLAGS_ID = `${PACKAGE_NAME}-flags`;
@@ -77,7 +89,7 @@ const CORRECT_RESPONSE_STATUSES = new Set([
 const install = (Vue = null, options = {}) => {
 
 	/* merge default options object with supplied options object */
-	for(const option of ["directives", "attributes"]) options[option] = Object.assign({}, DEFAULT_OPTIONS[option], options[option] || {});
+	["directives", "attributes", "cache"].forEach(option => options[option] = Object.assign({}, DEFAULT_OPTIONS[option], options[option] || {}));
 	options = Object.assign({}, DEFAULT_OPTIONS, options);
 
 	/* loop over all directives options */
@@ -111,6 +123,14 @@ const install = (Vue = null, options = {}) => {
 
 	}
 
+	/* loop over all cache options */
+	for(const option in options.cache) {
+
+		/* cast option value to string if option is version or boolean otherwise */
+		options.cache[option] = option === "version" ? options.cache[option].toString().trim().toLowerCase() : !!options.cache[option];
+
+	}
+
 	/* cast xhtml option to boolean */
 	options.xhtml = !!options.xhtml;
 
@@ -127,12 +147,26 @@ const install = (Vue = null, options = {}) => {
 	options._observer = "IntersectionObserver" in window;
 
 	/* throw error if intersection observer is not available */
-	// We log error instead and disable lazy processing of image nodes in processing function.
+	// We log error instead and disable lazy processing of image nodes in processing function - processImageNode().
 	// if(!options._observer) throw new Error(`[${PACKAGE_NAME}] Feature is not supported by browser! [IntersectionObserver]`);
 	if(!options._observer) console.error(`[${PACKAGE_NAME}] Feature is not supported by browser! Disabling lazy processing of image nodes. [IntersectionObserver]`); // eslint-disable-line no-console
 
-	/* create empty cache map */
-	const cache = new Map;
+	/* check if local storage is available */
+	options._storage = "localStorage" in window;
+
+	/* throw error if local storage is not available */
+	// We log error instead and disable caching of SVG files in processing function - fetchSvgFile().
+	// if(!options._storage && options.cache.persistent) throw new Error(`[${PACKAGE_NAME}] Feature is not supported by browser! [localStorage]`);
+	if(!options._storage && options.cache.persistent) console.error(`[${PACKAGE_NAME}] Feature is not supported by browser! Disabling persistent cache of SVG files. [localStorage]`); // eslint-disable-line no-console
+
+	/* define id for cache map local storage key */
+	const CACHE_ID = `${PACKAGE_NAME}:${options.cache.version}`;
+
+	/* remove previous cache map revisions */
+	if(options._storage && options.cache.removeRevisions) Object.entries(localStorage).map(item => item.shift()).filter(item => item.startsWith(`${PACKAGE_NAME}:`) && !item.endsWith(`:${options.cache.version}`)).forEach(item => localStorage.removeItem(item));
+
+	/* create empty cache map or restore stored cache map */
+	const cache = options._storage && options.cache.persistent ? new Map(JSON.parse(localStorage.getItem(CACHE_ID) || "[]")) : new Map;
 
 	/* create empty symbol set */
 	const symbols = new Set;
@@ -374,6 +408,9 @@ const install = (Vue = null, options = {}) => {
 
 					/* store svg file object in cache map */
 					cache.set(file.path, file.content);
+
+					/* store cache map in local storage */
+					if(options._storage && options.cache.persistent) localStorage.setItem(CACHE_ID, JSON.stringify([...cache]));
 
 					/* resolve svg file object */
 					return resolve(file);

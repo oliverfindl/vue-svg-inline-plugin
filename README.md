@@ -169,6 +169,11 @@ This plugin supports lazy loading of SVG files. To enable it, rename `src` attri
 		data: [],
 		remove: ["alt", "src", "data-src"]
 	},
+	cache: {
+		version: "<PACKAGE_VERSION>",
+		persistent: true,
+		removeRevisions: true
+	},
 	xhtml: false
 }
 ```
@@ -192,6 +197,15 @@ Array of attributes (lowercase strings) which should be transformed into data-at
 
 * **attributes.remove:**  
 Array of attributes (lowercase strings) which should be removed.
+
+* **cache.version:**  
+Defines cache version (lowercase string or number).
+
+* **cache.persistent:**  
+Boolean. Cache downloaded SVG files into local storage.
+
+* **cache.removeRevisions:**  
+Boolean. Remove previous cache revisions from local storage.
 
 * **xhtml:**  
 Boolean. In XHTML mode attribute minimization is forbidden. Empty attributes are filled with their names to be XHTML-compliant (e.g.: disabled="disabled").
