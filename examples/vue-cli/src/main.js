@@ -12,6 +12,9 @@ VueSvgInlinePlugin.install(Vue, {
 		}],
 		data: ["src"],
 		remove: ["alt"]
+	},
+	cache: {
+		version: "example"
 	}
 });
 

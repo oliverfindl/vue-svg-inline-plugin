@@ -1,3 +1,3 @@
 # webpack
 
-[Source](https://github.com/oliverfindl/webpack-vue-boilerplate)
+Source: [webpack-vue-boilerplate](https://github.com/oliverfindl/webpack-vue-boilerplate).

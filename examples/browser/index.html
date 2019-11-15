@@ -17,10 +17,16 @@
 				{{ message }}
 			</p>
 			<p>
+				Inline:<br /><br />
+				<img v-svg-inline class="logo img" src="images/logo.svg?0" alt="Vue logo 0" />
+				<br /><br /><br />
+				Inline lazy:<br /><br />
 				<img v-svg-inline class="logo img" data-src="images/logo.svg?1" alt="Vue logo 1" />
 				<br /><br /><br />
+				Inline sprite lazy:<br /><br />
 				<img v-svg-inline-sprite class="logo img" data-src="images/logo.svg?2" alt="Vue logo 1/2" />
 				<br /><br /><br />
+				Inline sprite lazy (same as above - testing cache):<br /><br />
 				<img v-svg-inline-sprite class="logo img" data-src="images/logo.svg?2" alt="Vue logo 2/2" />
 			</p>
 		</main>
@@ -31,7 +37,7 @@
 			"use strict";
 
 			/* initialize vue plugin */
-			Vue.use(VueSvgInlinePlugin);
+			VueSvgInlinePlugin.install(Vue, { cache: { version: "example" } });
 
 			/* intialize vue app */
 			new Vue({

@@ -94,10 +94,19 @@ module.exports = {
 			]
 		}, {
 			test: /\.svg(\?.*)?$/i,
-			loader: "file-loader",
-			options: {
-				name: "images/[name].[ext]"
-			}
+			use: [{
+				loader: "file-loader",
+				options: {
+					name: "images/[name].[ext]"
+				}
+			}, {
+				loader: "svgo-loader",
+				options: {
+					plugins: [{
+						removeViewBox: false
+					}]
+				}
+			}]
 		}, {
 			test: /\.(png|jpe?g|gif|ico)(\?.*)?$/i,
 			loader: "file-loader",
