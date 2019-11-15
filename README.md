@@ -174,6 +174,7 @@ This plugin supports lazy loading of SVG files. To enable it, rename `src` attri
 		persistent: true,
 		removeRevisions: true
 	},
+	intersectionObserverOptions: {},
 	xhtml: false
 }
 ```
@@ -206,6 +207,9 @@ Boolean. Cache downloaded SVG files into local storage.
 
 * **cache.removeRevisions:**  
 Boolean. Remove previous cache revisions from local storage.
+
+* **intersectionObserverOptions:**  
+Intersection observer options object for processing image nodes. This option is not validated. [Official documentation](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API#Intersection_observer_options).
 
 * **xhtml:**  
 Boolean. In XHTML mode attribute minimization is forbidden. Empty attributes are filled with their names to be XHTML-compliant (e.g.: disabled="disabled").

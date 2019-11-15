@@ -43,6 +43,7 @@ const DEFAULT_OPTIONS = {
 		persistent: true,
 		removeRevisions: true
 	},
+	intersectionObserverOptions: {},
 	xhtml: false
 };
 
@@ -89,7 +90,7 @@ const CORRECT_RESPONSE_STATUSES = new Set([
 const install = (Vue = null, options = {}) => {
 
 	/* merge default options object with supplied options object */
-	["directives", "attributes", "cache"].forEach(option => options[option] = Object.assign({}, DEFAULT_OPTIONS[option], options[option] || {}));
+	["directives", "attributes", "cache", "intersectionObserverOptions"].forEach(option => options[option] = Object.assign({}, DEFAULT_OPTIONS[option], options[option] || {}));
 	options = Object.assign({}, DEFAULT_OPTIONS, options);
 
 	/* loop over all directives options */
@@ -206,7 +207,7 @@ const install = (Vue = null, options = {}) => {
 
 			}
 
-		});
+		}, options.intersectionObserverOptions);
 
 		/* set image node intersection observer reference into reference map */
 		refs.set(OBSERVER_REF_ID, observer);
