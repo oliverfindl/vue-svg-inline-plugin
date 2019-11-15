@@ -6,11 +6,14 @@
 
 "use strict";
 
+/* import constants from package.json file */
+import { name, version } from "../package.json";
+
 /* define PACKAGE_NAME constant */
-const PACKAGE_NAME = "vue-svg-inline-plugin";
+const PACKAGE_NAME = name;
 
 /* define PACKAGE_VERSION constant */
-const PACKAGE_VERSION = "1.0.0";
+const PACKAGE_VERSION = version;
 
 /* import polyfills if requested */
 // It is not possible to perform conditional import, so we use require syntax instead.
