@@ -38,14 +38,20 @@ const DEFAULT_OPTIONS = {
 	xhtml: false
 };
 
+/* define reference id for image node intersection observer */
+const OBSERVER_REF_ID = "observer";
+
+/* define reference id for svg symbol container node */
+const CONTAINER_REF_ID = "container";
+
 /* define id for image node flags */
 const FLAGS_ID = `${PACKAGE_NAME}-flags`;
 
-/* define id for svg symbol */
+/* define id for svg symbol node*/
 const SYMBOL_ID = `${PACKAGE_NAME}-sprite`; // + `-<NUMBER>` - will be added dynamically
 
-/* define id for svg symbol container */
-const CONTAINER_ID = `${SYMBOL_ID}-container`;
+/* define id for svg symbol container node */
+const CONTAINER_ID = `${SYMBOL_ID}-${OBSERVER_REF_ID}`;
 
 /* define all regular expression patterns */
 const PATTERN_SVG_FILENAME = /.+\.svg(?:[?#].*)?$/i;
@@ -131,8 +137,8 @@ const install = (Vue = null, options = {}) => {
 	/* create empty symbol set */
 	const symbols = new Set;
 
-	/* store image node intersection observer reference */
-	let observerRef;
+	/* create empty reference map */
+	const refs = new Map;
 
 	/**
 	 * Create image node intersection observer.
@@ -144,10 +150,10 @@ const install = (Vue = null, options = {}) => {
 		if(!options._observer) throw new Error(`[${PACKAGE_NAME}] Feature is not supported by browser! [IntersectionObserver]`);
 
 		/* throw error if image node intersection observer already exists */
-		if(observerRef) throw new Error(`[${PACKAGE_NAME}] Can not create image node intersection observer, intersection observer already exists!`);
+		if(refs.has(OBSERVER_REF_ID)) throw new Error(`[${PACKAGE_NAME}] Can not create image node intersection observer, intersection observer already exists!`);
 
-		/* return intersection observer */
-		return new IntersectionObserver((entries, observer) => {
+		/* create image node intersection observer */
+		const observer = new IntersectionObserver((entries, observer) => {
 
 			/* loop over all observer entries */
 			for(const entry of entries) {
@@ -168,6 +174,12 @@ const install = (Vue = null, options = {}) => {
 
 		});
 
+		/* set image node intersection observer reference into reference map */
+		refs.set(OBSERVER_REF_ID, observer);
+
+		/* return image node intersection observer reference */
+		return observer;
+
 	};
 
 	/**
@@ -176,12 +188,10 @@ const install = (Vue = null, options = {}) => {
 	 */
 	const getImageNodeIntersectionObserver = () => {
 
-		return observerRef || (observerRef = createImageNodeIntersectionObserver());
+		/* return image node intersection observer reference */
+		return refs.has(OBSERVER_REF_ID) ? refs.get(OBSERVER_REF_ID) : createImageNodeIntersectionObserver();
 
 	};
-
-	/* store svg symbol container node reference */
-	let containerRef;
 
 	/**
 	 * Create and append SVG symbol container node into document body.
@@ -190,16 +200,19 @@ const install = (Vue = null, options = {}) => {
 	const createSvgSymbolContainer = () => {
 
 		/* throw error if SVG symbol container node already exists */
-		if(containerRef) throw new Error(`[${PACKAGE_NAME}] Can not create SVG symbol container node, container node already exists!`);
+		if(refs.has(CONTAINER_REF_ID)) throw new Error(`[${PACKAGE_NAME}] Can not create SVG symbol container node, container node already exists!`);
 
 		/* create svg symbol container node */
-		const container = createNode(`<svg xmlns="http://www.w3.org/2000/svg" id="${CONTAINER_ID}" style="display: none !important;"></svg>`);
+		let container = createNode(`<svg xmlns="http://www.w3.org/2000/svg" id="${CONTAINER_ID}" style="display: none !important;"></svg>`);
 
 		/* append svg symbol container node into document body */
 		document.body.appendChild(container);
 
+		/* set svg symbol container node reference into reference map */
+		refs.set(CONTAINER_REF_ID, container = document.getElementById(CONTAINER_ID));
+
 		/* return svg symbol container node reference */
-		return document.getElementById(CONTAINER_ID);
+		return container;
 
 	};
 
@@ -210,7 +223,7 @@ const install = (Vue = null, options = {}) => {
 	const getSvgSymbolContainer = () => {
 
 		/* return svg symbol container node reference */
-		return containerRef || (containerRef = createSvgSymbolContainer());
+		return refs.has(CONTAINER_REF_ID) ? refs.get(CONTAINER_REF_ID) : createSvgSymbolContainer();
 
 	};
 
@@ -455,7 +468,7 @@ const install = (Vue = null, options = {}) => {
 		/* inject attributes from attribute map into svg file content */
 		return file.content.replace(PATTERN_SVG_CONTENT, (svg, attributes, symbol) => { // eslint-disable-line no-unused-vars
 
-			/* transform matched attributes to attribute map */
+			/* transform matched attributes into attribute map */
 			// attributes = createAttributeMap(attributes);
 
 			/* store string representation of node reference and cast it to string */
@@ -484,7 +497,7 @@ const install = (Vue = null, options = {}) => {
 				/* merge attribute values */
 				const values = [...fileValues, ...nodeValues];
 
-				/* set attribute values to attribute map */
+				/* set attribute values into attribute map */
 				attributes.set(attribute, (uniqueAttributeValues.has(attribute) ? [...new Set(values)] : values).join(" ").trim());
 
 			}
@@ -512,7 +525,7 @@ const install = (Vue = null, options = {}) => {
 
 				}
 
-				/* set attribute values to attribute map */
+				/* set attribute values into attribute map */
 				attributes.set(attribute.name, (uniqueAttributeValues.has(attribute.name) ? [...new Set(values)] : values).join(" ").trim());
 
 			}
@@ -546,7 +559,7 @@ const install = (Vue = null, options = {}) => {
 
 				}
 
-				/* set data-attribute values to attribute map */
+				/* set data-attribute values into attribute map */
 				attributes.set(dataAttribute, (uniqueAttributeValues.has(attribute) ? [...new Set(values)] : values).join(" ").trim());
 
 				/* add attribute to remove from attribute map into options.attributes.remove set if there is not already present */
