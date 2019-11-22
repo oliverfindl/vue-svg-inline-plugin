@@ -45,7 +45,7 @@
 	},
 	"homepage": "https://github.com/oliverfindl/vue-svg-inline-plugin#readme",
 	"dependencies": {
-		"core-js": "^3.4.1",
+		"core-js": "^3.4.2",
 		"intersection-observer": "^0.7.0",
 		"whatwg-fetch": "^3.0.0"
 	},
@@ -54,9 +54,9 @@
 		"@babel/preset-env": "^7.7.1",
 		"babel-eslint": "^10.0.3",
 		"babel-loader": "^8.0.6",
-		"babel-plugin-remove-template-literals-whitespace": "^1.0.0",
+		"babel-plugin-remove-template-literals-whitespace": "^1.0.1",
 		"cross-env": "^6.0.0",
-		"eslint": "^6.6.0",
+		"eslint": "^6.7.0",
 		"eslint-loader": "^3.0.2",
 		"eslint-plugin-vue": "^6.0.1",
 		"rimraf": "^3.0.0",
