@@ -57,7 +57,7 @@ const OBSERVER_REF_ID = "observer";
 const CONTAINER_REF_ID = "container";
 
 /* define id for cache map local storage key */
-// Will be defined dynamically based on supplied options.cache.version string or number.
+// Will be defined dynamically based on supplied options.cache.version value.
 // const CACHE_ID = `${PACKAGE_NAME}:${PACKAGE_VERSION}`;
 
 /* define id for image node flags */
@@ -67,7 +67,7 @@ const FLAGS_ID = `${PACKAGE_NAME}-flags`;
 const SYMBOL_ID = `${PACKAGE_NAME}-sprite`; // + `-<NUMBER>` - will be added dynamically
 
 /* define id for svg symbol container node */
-const CONTAINER_ID = `${SYMBOL_ID}-${OBSERVER_REF_ID}`;
+const CONTAINER_ID = `${SYMBOL_ID}-${CONTAINER_REF_ID}`;
 
 /* define all regular expression patterns */
 const PATTERN_SVG_FILENAME = /.+\.svg(?:[?#].*)?$/i;
