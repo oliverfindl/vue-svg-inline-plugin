@@ -136,9 +136,9 @@ module.exports = {
 		}]),
 		new HtmlWebpackPlugin({
 			filename: "index.html",
-			template: "src/index.html",
+			template: resolve("src/index.html"),
 			inject: true,
-			favicon: "src/favicon.ico",
+			favicon: resolve("src/favicon.ico"),
 			minify: {
 				collapseInlineTagWhitespace: true,
 				collapseWhitespace: true,
