@@ -19,6 +19,8 @@
 * [Directives](#directives)
 * [Lazy loading](#lazy-loading)
 * [Configuration](#configuration)
+* [Polyfills](#polyfills)
+* [Examples](#examples)
 
 ---
 
@@ -50,7 +52,7 @@ $ yarn add vue-svg-inline-plugin
 
 ### Modern browsers
 
-> This version is not transpiled and does not include any polyfills.
+> This version is not transpiled and does not include any [polyfills](#polyfills).
 
 * [unpkg](https://unpkg.com/) [[package](https://www.unpkg.com/browse/vue-svg-inline-plugin/)]:
 ```html
@@ -142,7 +144,7 @@ Replaces into:
 
 ## Lazy loading
 
-This plugin supports lazy loading of SVG files. To enable it, rename `src` attribute to `data-src`. Please also provide placeholder image, which should be located in `src` attribute to avoid broken image icons in browsers.
+This plugin supports lazy (down)loading of SVG files. To enable it, rename `src` attribute to `data-src`. Please also provide placeholder image, which should be located in `src` attribute to avoid broken image icons in browsers.
 
 ## Configuration
 
@@ -219,6 +221,21 @@ Boolean. In XHTML mode attribute minimization is forbidden. Empty attributes are
 * User-defined options are deep-merged with default options. Arrays are not concatenated.
 
 * Attributes options are executed in this order: **merge** > **add** > **data** > **remove**.
+
+## Polyfills
+
+ Required polyfills for IE:
+
+* [fetch](https://github.com/github/fetch) or [axios](https://github.com/axios/axios) library
+* [IntersectionObserver](https://github.com/w3c/IntersectionObserver)
+
+## Examples
+
+* [browser example](https://github.com/oliverfindl/vue-svg-inline-plugin/tree/master/examples/browser)
+
+* [vue-cli example](https://github.com/oliverfindl/vue-svg-inline-plugin/tree/master/examples/vue-cli)
+
+* [webpack example](https://github.com/oliverfindl/vue-svg-inline-plugin/tree/master/examples/webpack)
 
 ---
 
