@@ -7,6 +7,8 @@
 
 [Vue][vue] plugin for inline replacement of SVG images with actual content of SVG files.
 
+> ⚠ Reactive [Vue][vue] bindings won't be transfered to SVG replacement.
+
 > SVG files should be optimised beforehand (e.g.: using [SVGO](https://www.npmjs.com/package/svgo) or [SVGOMG](https://jakearchibald.github.io/svgomg/)).
 
 > Placeholder images should be optimised beforehand (e.g.: using [pngquant](https://pngquant.org/) or [TinyPNG](https://tinypng.com/) / [TinyJPG](https://tinyjpg.com/)).
@@ -230,8 +232,8 @@ Boolean. In XHTML mode attribute minimization is forbidden. Empty attributes are
 
  Required polyfills for IE:
 
-* [fetch](https://github.com/github/fetch) or [axios](https://github.com/axios/axios) library
-* [IntersectionObserver](https://github.com/w3c/IntersectionObserver)
+* [fetch](https://github.com/github/fetch) polyfill or [axios](https://github.com/axios/axios) library
+* [IntersectionObserver](https://github.com/w3c/IntersectionObserver) polyfill
 
 ## Examples
 
