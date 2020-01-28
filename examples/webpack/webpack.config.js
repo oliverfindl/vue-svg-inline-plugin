@@ -6,9 +6,7 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
-module.exports = {
-	mode: process.env.NODE_ENV,
-	target: "web",
+module.exports = env => ({ // eslint-disable-line no-unused-vars 
 	entry: resolve(__dirname, "src/main.js"),
 	output: {
 		path: resolve(__dirname, "dist"),
@@ -97,7 +95,8 @@ module.exports = {
 			use: [{
 				loader: "file-loader",
 				options: {
-					name: "images/[name].[ext]"
+					name: "images/[name].[ext]",
+					esModule: false
 				}
 			}, {
 				loader: "svgo-loader",
@@ -111,19 +110,22 @@ module.exports = {
 			test: /\.(png|jpe?g|gif|ico)(\?.*)?$/i,
 			loader: "file-loader",
 			options: {
-				name: "images/[name].[hash:8].[ext]"
+				name: "images/[name].[hash:8].[ext]",
+				esModule: false
 			}
 		}, {
 			test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/i,
 			loader: "file-loader",
 			options: {
-				name: "media/[name].[hash:8].[ext]"
+				name: "media/[name].[hash:8].[ext]",
+				esModule: false
 			}
 		}, {
 			test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/i,
 			loader: "file-loader",
 			options: {
-				name:"fonts/[name].[hash:8].[ext]"
+				name:"fonts/[name].[hash:8].[ext]",
+				esModule: false
 			}
 		}]
 	},
@@ -156,4 +158,4 @@ module.exports = {
 			"@": resolve(__dirname, "src")
 		}
 	}
-};
+});

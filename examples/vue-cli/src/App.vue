@@ -1,5 +1,5 @@
 <template>
-	<div id="app" v-show="true" style="display: none;">
+	<div id="app" v-cloak>
 		<img v-svg-inline class="vue-logo-img" src="/images/logo.svg" alt="Vue logo" />
 		<HelloWorld message="Welcome to Your Vue.js App" />
 	</div>
@@ -24,9 +24,13 @@ export default {
 	text-align: center;
 	color: #2c3e50;
 	margin-top: 60px;
-}
 
-#app .vue-logo-img {
-	max-width: 10rem;
+	&[v-cloak] {
+		display: none;
+	}
+
+	.vue-logo-img {
+		max-width: 10rem;
+	}
 }
 </style>
