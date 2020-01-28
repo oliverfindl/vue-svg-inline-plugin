@@ -6,7 +6,11 @@
 
 "use strict";
 
-/* import constants from package.json file */
+/* import PACKAGE_NAME and PACKAGE_VERSION constants from package.json file */
+// This syntax removes banner in modern build.
+// import { name as PACKAGE_NAME, version as PACKAGE_VERSION } from "../package.json";
+
+/* import package name and version constants from package.json file */
 import { name, version } from "../package.json";
 
 /* define PACKAGE_NAME constant */
