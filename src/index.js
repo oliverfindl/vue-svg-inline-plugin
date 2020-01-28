@@ -51,6 +51,7 @@ const DEFAULT_OPTIONS = {
 		removeRevisions: true
 	},
 	intersectionObserverOptions: {},
+	axios: null,
 	xhtml: false
 };
 
@@ -142,11 +143,30 @@ const install = (Vue = null, options = {}) => {
 	/* cast xhtml option to boolean */
 	options.xhtml = !!options.xhtml;
 
+	/* store function string reference */
+	const _fnc = "function";
+
 	/* check if fetch is available */
-	options._fetch = "fetch" in window;
+	options._fetch = "fetch" in window && typeof fetch === _fnc;
 
 	/* check if axios is available */
-	options._axios = "axios" in window;
+	options._axios = "axios" in window && typeof axios === _fnc;
+
+	/**
+	 * Validate Axios instance get method.
+	 * @param {Axios} axios - Axios instance.
+	 * @returns {Boolean} Validation result.
+	 */
+	const validateAxiosGetMethod = (axios = null) => !!axios && typeof axios === _fnc && "get" in axios && typeof axios.get === _fnc;
+
+	/* axios validation result */
+	let axiosIsValid = false;
+
+	/* create new axios instance if not provided or not valid */
+	options.axios = ((axiosIsValid = validateAxiosGetMethod(options.axios)) ? options.axios : null) || (options._axios && "create" in axios && typeof axios.create === _fnc ? axios.create() : null); // eslint-disable-line no-cond-assign
+
+	/* check if axios instance exists and is valid */
+	options._axios = axiosIsValid || validateAxiosGetMethod(options.axios);
 
 	/* throw error if fetch and axios are not available */
 	if(!options._fetch && !options._axios) throw new Error(`[${PACKAGE_NAME}] Feature is not supported by browser! [fetch || axios]`);
@@ -395,7 +415,7 @@ const install = (Vue = null, options = {}) => {
 			}
 
 			/* fetch svg file */
-			(options._axios ? axios.get : fetch).bind(window)(file.path)
+			(options._axios ? options.axios.get : fetch)(file.path)
 
 				/* validate response status and return response data as string */
 				.then(response => {

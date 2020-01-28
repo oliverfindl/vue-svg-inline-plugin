@@ -177,6 +177,7 @@ This plugin supports lazy (down)loading of SVG files. To enable it, rename `src`
 		removeRevisions: true
 	},
 	intersectionObserverOptions: {},
+	axios: null,
 	xhtml: false
 }
 ```
@@ -212,6 +213,9 @@ Boolean. Remove previous cache revisions from local storage.
 
 * **intersectionObserverOptions:**  
 Intersection observer options object for processing image nodes. This option is not validated. [Official documentation](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API#Intersection_observer_options).
+
+* **axios:**  
+Axios instance with pre-configured options. If omitted, new axios instance (if axios available) will be created. [Official documentation](https://github.com/axios/axios#creating-an-instance).
 
 * **xhtml:**  
 Boolean. In XHTML mode attribute minimization is forbidden. Empty attributes are filled with their names to be XHTML-compliant (e.g.: disabled="disabled").
