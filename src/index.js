@@ -78,7 +78,7 @@ const CONTAINER_ID = `${SYMBOL_ID}-${CONTAINER_REF_ID}`;
 const PATTERN_SVG_FILENAME = /.+\.svg(?:[?#].*)?$/i;
 const PATTERN_SVG_CONTENT = /<svg(\s+[^>]+)?>([\s\S]+)<\/svg>/i;
 const PATTERN_ATTRIBUTES = /\s*([^\s=]+)[\s=]+(?:"([^"]*)"|'([^']*)')?\s*/g;
-const PATTERN_ATTRIBUTE_NAME = /^[a-z](?:[a-z0-9-]*[a-z0-9])?$/i;
+const PATTERN_ATTRIBUTE_NAME = /^[a-z](?:[a-z0-9-:]*[a-z0-9])?$/i;
 const PATTERN_VUE_DIRECTIVE = /^v-/i;
 const PATTERN_WHITESPACE = /\s+/g;
 const PATTERN_TEMPLATE_LITERALS_WHITESPACE = /[\n\t]+/g;
