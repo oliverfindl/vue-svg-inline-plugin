@@ -3,7 +3,7 @@
 	"version": "1.0.0",
 	"scripts": {
 		"start": "php -S 127.0.0.1:8080 -t dist",
-		"dev": "npx webpack-dev-server ---mode=development --hot --open",
+		"dev": "npx webpack-dev-server --mode=development --hot --open",
 		"build": "npx webpack --mode=production --hide-modules --progress",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
