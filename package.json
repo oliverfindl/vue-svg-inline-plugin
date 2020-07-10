@@ -14,7 +14,7 @@
 		"example": "examples"
 	},
 	"scripts": {
-		"build": "npm run remove && npm run build:default && npm run build:modern",
+		"build": "npm run remove && npm run build:modern && npm run build:default",
 		"build:default": "npm run remove:default && npx cross-env IMPORT_POLYFILLS=1 npm run webpack",
 		"build:modern": "npm run remove:modern && npm run webpack",
 		"remove": "npm run remove:default && npm run remove:modern",
@@ -61,6 +61,7 @@
 		"eslint-plugin-vue": "^6.1.2",
 		"rimraf": "^3.0.1",
 		"webpack": "^4.41.5",
+		"webpack-bundle-analyzer": "^3.8.0",
 		"webpack-cli": "^3.3.10"
 	}
 }

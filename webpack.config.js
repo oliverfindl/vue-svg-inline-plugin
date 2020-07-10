@@ -2,14 +2,15 @@
 
 const { resolve } = require("path");
 const { DefinePlugin } = require("webpack");
+const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 
 const IMPORT_POLYFILLS = process.env.IMPORT_POLYFILLS | 0;
 
-const BABEL_PLUGINS = ["babel-plugin-remove-template-literals-whitespace"];
-const BABEL_PRESETS = IMPORT_POLYFILLS ? [["@babel/preset-env", {
+const BABEL_PLUGINS = [ "babel-plugin-remove-template-literals-whitespace" ];
+const BABEL_PRESETS = IMPORT_POLYFILLS ? [ [ "@babel/preset-env", {
 	useBuiltIns: "usage",
 	corejs: 3
-}]] : [];
+} ] ] : [];
 
 module.exports = {
 	mode: "production",
@@ -48,6 +49,7 @@ module.exports = {
 	plugins: [
 		new DefinePlugin({
 			"IMPORT_POLYFILLS": JSON.stringify(IMPORT_POLYFILLS)
-		})
+		}),
+		...IMPORT_POLYFILLS ? [ new BundleAnalyzerPlugin() ] : []
 	]
 };
