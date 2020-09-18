@@ -7,6 +7,8 @@
 
 [Vue][vue] plugin for inline replacement of SVG images with actual content of SVG files.
 
+> ⚠ Works only with Vue@2.
+
 > ⚠ Reactive [Vue][vue] bindings won't be transfered to SVG replacement.
 
 > SVG files should be optimised beforehand (e.g.: using [SVGO](https://www.npmjs.com/package/svgo) or [SVGOMG](https://jakearchibald.github.io/svgomg/)).
