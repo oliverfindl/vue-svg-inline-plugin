@@ -22,7 +22,7 @@ const PACKAGE_VERSION = version;
 /* import polyfills if requested */
 // It is not possible to perform conditional import, so we use require syntax instead.
 // if(typeof IMPORT_POLYFILLS !== "undefined" && !!IMPORT_POLYFILLS) import "./polyfills"; // eslint-disable-line no-extra-boolean-cast
-if(typeof IMPORT_POLYFILLS !== "undefined" && !!IMPORT_POLYFILLS) require("./polyfills"); // eslint-disable-line no-extra-boolean-cast
+if(typeof IMPORT_POLYFILLS !== "undefined" && !!IMPORT_POLYFILLS) require("./polyfills"); // eslint-disable-line no-extra-boolean-cast, no-undef
 
 /* define default options object */
 const DEFAULT_OPTIONS = {

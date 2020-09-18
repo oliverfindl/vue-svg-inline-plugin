@@ -3,8 +3,7 @@
 module.exports = {
 	"env": {
 		"browser": true,
-		"commonjs": true,
-		"es2020": true
+		"es2021": true
 	},
 	"extends": [
 		"eslint:recommended",
@@ -15,7 +14,7 @@ module.exports = {
 		"axios": "readonly"
 	},
 	"parserOptions": {
-		"ecmaVersion": 11,
+		"ecmaVersion": 12,
 		"parser": "babel-eslint",
 		"sourceType": "module"
 	},
