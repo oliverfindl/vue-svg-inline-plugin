@@ -10,18 +10,18 @@
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"dependencies": {
-		"core-js": "^3.6.4",
-		"vue": "^2.6.11"
+		"core-js": "^3.6.5",
+		"vue": "^2.6.12"
 	},
 	"devDependencies": {
-		"@vue/cli-plugin-babel": "^4.1.2",
-		"@vue/cli-plugin-eslint": "^4.1.2",
-		"@vue/cli-service": "^4.1.2",
-		"babel-eslint": "^10.0.3",
-		"eslint": "^6.8.0",
-		"eslint-plugin-vue": "^6.1.2",
-		"node-sass": "^4.13.1",
-		"sass-loader": "^8.0.2",
-		"vue-template-compiler": "^2.6.11"
+		"@vue/cli-plugin-babel": "^4.5.6",
+		"@vue/cli-plugin-eslint": "^4.5.6",
+		"@vue/cli-service": "^4.5.6",
+		"babel-eslint": "^10.1.0",
+		"eslint": "^7.9.0",
+		"eslint-plugin-vue": "^6.2.2",
+		"node-sass": "^4.14.1",
+		"sass-loader": "^10.0.2",
+		"vue-template-compiler": "^2.6.12"
 	}
 }

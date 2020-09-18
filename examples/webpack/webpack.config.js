@@ -6,7 +6,7 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
-module.exports = env => ({ // eslint-disable-line no-unused-vars 
+module.exports = env => ({ // eslint-disable-line no-unused-vars
 	entry: resolve(__dirname, "src/main.js"),
 	output: {
 		path: resolve(__dirname, "dist"),
@@ -56,14 +56,32 @@ module.exports = env => ({ // eslint-disable-line no-unused-vars
 			test: /\.css$/i,
 			use: [
 				"vue-style-loader",
-				"css-loader",
+				{
+					loader: "css-loader",
+					options: {
+						esModule: false,
+						importLoaders: 1
+						// 0 => no loaders (default);
+						// 1 => postcss-loader;
+					}
+				},
 				"postcss-loader"
 			]
 		}, {
 			test: /\.scss$/i,
 			use: [
 				"vue-style-loader",
-				"css-loader",
+				{
+					loader: "css-loader",
+					options: {
+						esModule: false,
+						importLoaders: 2
+						// 0 => no loaders (default);
+						// 1 => postcss-loader;
+						// 2 => postcss-loader, sass-loader
+					}
+				},
+				"postcss-loader",
 				{
 					loader: "sass-loader",
 					options: {
@@ -71,14 +89,23 @@ module.exports = env => ({ // eslint-disable-line no-unused-vars
 							outputStyle: "compressed"
 						}
 					}
-				},
-				"postcss-loader"
+				}
 			]
 		}, {
 			test: /\.sass$/i,
 			use: [
 				"vue-style-loader",
-				"css-loader",
+				{
+					loader: "css-loader",
+					options: {
+						esModule: false,
+						importLoaders: 2
+						// 0 => no loaders (default);
+						// 1 => postcss-loader;
+						// 2 => postcss-loader, sass-loader
+					}
+				},
+				"postcss-loader",
 				{
 					loader: "sass-loader",
 					options: {
@@ -87,15 +114,14 @@ module.exports = env => ({ // eslint-disable-line no-unused-vars
 							outputStyle: "compressed"
 						}
 					}
-				},
-				"postcss-loader"
+				}
 			]
 		}, {
 			test: /\.svg(\?.*)?$/i,
 			use: [{
 				loader: "file-loader",
 				options: {
-					name: "images/[name].[ext]",
+					name: "images/[name].[hash:8].[ext]",
 					esModule: false
 				}
 			}, {
@@ -107,14 +133,14 @@ module.exports = env => ({ // eslint-disable-line no-unused-vars
 				}
 			}]
 		}, {
-			test: /\.(png|jpe?g|gif|ico)(\?.*)?$/i,
+			test: /\.(png|jpe?g|webp|gif|ico)(\?.*)?$/i,
 			loader: "file-loader",
 			options: {
 				name: "images/[name].[hash:8].[ext]",
 				esModule: false
 			}
 		}, {
-			test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/i,
+			test: /\.(mp4|webm|ogg|mp3|aac|wav|flac)(\?.*)?$/i,
 			loader: "file-loader",
 			options: {
 				name: "media/[name].[hash:8].[ext]",
@@ -124,7 +150,7 @@ module.exports = env => ({ // eslint-disable-line no-unused-vars
 			test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/i,
 			loader: "file-loader",
 			options: {
-				name:"fonts/[name].[hash:8].[ext]",
+				name: "fonts/[name].[hash:8].[ext]",
 				esModule: false
 			}
 		}]
@@ -132,15 +158,17 @@ module.exports = env => ({ // eslint-disable-line no-unused-vars
 	plugins: [
 		new VueLoaderPlugin(),
 		new CleanWebpackPlugin(),
-		new CopyWebpackPlugin([{
-			from: "src/.ht*",
-			to: "[name].[ext]"
-		}]),
+		new CopyWebpackPlugin({
+			patterns: [{
+				from: "src/.ht*",
+				to: "[name].[ext]"
+			}]
+		}),
 		new HtmlWebpackPlugin({
 			filename: "index.html",
-			template: resolve("src/index.html"),
+			template: resolve(__dirname, "src/index.html"),
 			inject: true,
-			favicon: resolve("src/favicon.ico"),
+			favicon: resolve(__dirname, "src/favicon.ico"),
 			minify: {
 				collapseInlineTagWhitespace: true,
 				collapseWhitespace: true,
@@ -152,7 +180,7 @@ module.exports = env => ({ // eslint-disable-line no-unused-vars
 		})
 	],
 	resolve: {
-		extensions: [".vue", ".js", ".json"],
+		extensions: [ ".vue", ".js", ".mjs", ".json" ],
 		alias: {
 			"vue$": "vue/dist/vue.esm.js",
 			"@": resolve(__dirname, "src")
