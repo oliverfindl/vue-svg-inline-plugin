@@ -7,8 +7,8 @@
 	"jsdelivr": "dist/vue-svg-inline-plugin.min.js",
 	"files": [
 		"index.js",
-		"dist/**/*.js",
-		"src/*.js"
+		"dist/*.js",
+		"src/**/*.js"
 	],
 	"directories": {
 		"example": "examples"
