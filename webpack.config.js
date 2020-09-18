@@ -51,5 +51,8 @@ module.exports = {
 			"IMPORT_POLYFILLS": JSON.stringify(IMPORT_POLYFILLS)
 		}),
 		...IMPORT_POLYFILLS ? [ new BundleAnalyzerPlugin() ] : []
-	]
+	],
+	resolve: {
+        extensions: [ ".js", ".mjs" ]
+    }
 };
