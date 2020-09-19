@@ -13,16 +13,15 @@ const BABEL_PRESETS = IMPORT_POLYFILLS ? [ [ "@babel/preset-env", {
 } ] ] : [];
 
 module.exports = {
-	mode: "production",
-	target: "web",
 	entry: resolve(__dirname, "src/index.js"),
+	mode: "production",
 	output: {
-		path: resolve(__dirname, "dist"),
-		publicPath: "/",
 		filename: `vue-svg-inline-plugin${!IMPORT_POLYFILLS ? "-modern" : ""}.min.js`,
 		library: "VueSvgInlinePlugin",
 		libraryExport: "default",
-		libraryTarget: "umd"
+		libraryTarget: "umd",
+		path: resolve(__dirname, "dist"),
+		publicPath: "/"
 	},
 	module: {
 		rules: [{
@@ -46,13 +45,13 @@ module.exports = {
 			}
 		}]
 	},
+	resolve: {
+        extensions: [ ".js", ".mjs" ]
+	},
 	plugins: [
 		new DefinePlugin({
 			"IMPORT_POLYFILLS": JSON.stringify(IMPORT_POLYFILLS)
 		}),
 		...IMPORT_POLYFILLS ? [ new BundleAnalyzerPlugin() ] : []
-	],
-	resolve: {
-        extensions: [ ".js", ".mjs" ]
-    }
+	]
 };
