@@ -6,6 +6,10 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
+const { name: PACKAGE_NAME } = require(resolve(__dirname, "package.json"));
+
+const PUBLIC_PATH = "/";
+
 const BABEL_PLUGINS = [ "@babel/plugin-syntax-dynamic-import" ];
 const BABEL_PRESETS = [ [ "@babel/preset-env", {
 	useBuiltIns: "usage",
@@ -18,7 +22,7 @@ module.exports = {
 		filename: "javascript/[name].[hash:8].js",
 		chunkFilename: "javascript/[id].[chunkhash:8].js",
 		path: resolve(__dirname, "dist"),
-		publicPath: "/"
+		publicPath: PUBLIC_PATH
 	},
 	module: {
 		rules: [{
@@ -148,6 +152,13 @@ module.exports = {
 			}
 		}]
 	},
+	resolve: {
+		alias: {
+			"vue$": "vue/dist/vue.esm.js",
+			"@": resolve(__dirname, "src")
+		},
+		extensions: [ ".vue", ".js", ".mjs", ".json" ]
+	},
 	plugins: [
 		new VueLoaderPlugin(),
 		new CleanWebpackPlugin(),
@@ -158,10 +169,12 @@ module.exports = {
 			}]
 		}),
 		new HtmlWebpackPlugin({
+			title: PACKAGE_NAME,
 			filename: "index.html",
 			template: resolve(__dirname, "src/index.html"),
 			inject: true,
 			favicon: resolve(__dirname, "src/favicon.ico"),
+			base: PUBLIC_PATH,
 			minify: {
 				collapseInlineTagWhitespace: true,
 				collapseWhitespace: true,
@@ -172,13 +185,6 @@ module.exports = {
 			xhtml: true
 		})
 	],
-	resolve: {
-		extensions: [ ".vue", ".js", ".mjs", ".json" ],
-		alias: {
-			"vue$": "vue/dist/vue.esm.js",
-			"@": resolve(__dirname, "src")
-		}
-	},
 	devServer: {
 		contentBase: __dirname,
 		historyApiFallback: true,
