@@ -6,30 +6,26 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
-module.exports = env => ({ // eslint-disable-line no-unused-vars
+const BABEL_PLUGINS = [ "@babel/plugin-syntax-dynamic-import" ];
+const BABEL_PRESETS = [ [ "@babel/preset-env", {
+	useBuiltIns: "usage",
+	corejs: 3
+} ] ];
+
+module.exports = {
 	entry: resolve(__dirname, "src/main.js"),
 	output: {
-		path: resolve(__dirname, "dist"),
-		publicPath: "/",
 		filename: "javascript/[name].[hash:8].js",
-		chunkFilename: "javascript/[id].[chunkhash:8].js"
-	},
-	devServer: {
-		historyApiFallback: true,
-		overlay: {
-			errors: true,
-			warnings: true
-		}
-	},
-	performance: {
-		hints: false
+		chunkFilename: "javascript/[id].[chunkhash:8].js",
+		path: resolve(__dirname, "dist"),
+		publicPath: "/"
 	},
 	module: {
 		rules: [{
 			enforce: "pre",
 			test: /\.(vue|m?js)$/i,
-			exclude: /(node_modules|bower_components)/,
 			loader: "eslint-loader",
+			exclude: /(node_modules|bower_components)/,
 			options: {
 				emitError: true,
 				emitWarning: true,
@@ -46,11 +42,8 @@ module.exports = env => ({ // eslint-disable-line no-unused-vars
 			options: {
 				comments: false,
 				minified: true,
-				plugins: ["@babel/plugin-syntax-dynamic-import"],
-				presets: [["@babel/preset-env", {
-					useBuiltIns: "usage",
-					corejs: 3
-				}]]
+				plugins: BABEL_PLUGINS,
+				presets: BABEL_PRESETS
 			}
 		}, {
 			test: /\.css$/i,
@@ -185,5 +178,17 @@ module.exports = env => ({ // eslint-disable-line no-unused-vars
 			"vue$": "vue/dist/vue.esm.js",
 			"@": resolve(__dirname, "src")
 		}
+	},
+	devServer: {
+		contentBase: __dirname,
+		historyApiFallback: true,
+		hot: true,
+		inline: true,
+		open: true,
+		overlay: {
+			errors: true,
+			warnings: true
+		},
+		stats: "minimal"
 	}
-});
+};
