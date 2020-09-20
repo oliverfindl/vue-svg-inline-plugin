@@ -1,6 +1,6 @@
 /**
  * @author Oliver Findl
- * @version 1.2.6
+ * @version 1.2.7
  * @license MIT
  */
 
