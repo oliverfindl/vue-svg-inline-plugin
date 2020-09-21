@@ -1,5 +1,5 @@
 {
-	"name": "vue-cli",
+	"name": "vue-cli-vue2",
 	"version": "1.0.0",
 	"scripts": {
 		"start": "php -S 127.0.0.1:8080 -t dist",

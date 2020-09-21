@@ -1,6 +1,6 @@
 /**
  * @author Oliver Findl
- * @version 1.2.7
+ * @version 2.0.0-dev
  * @license MIT
  */
 
@@ -26,9 +26,9 @@ if(typeof IMPORT_POLYFILLS !== "undefined" && !!IMPORT_POLYFILLS) require("./pol
 
 /* define default options object */
 const DEFAULT_OPTIONS = {
-	directives: {
-		inline: "v-svg-inline",
-		inlineSprite: "v-svg-inline-sprite"
+	directive: {
+		name: "v-svg-inline",
+		spriteModifierName: "sprite"
 	},
 	attributes: {
 		merge: ["class", "style"],
@@ -91,29 +91,38 @@ const CORRECT_RESPONSE_STATUSES = new Set([
 
 /**
  * Install method for Vue plugin.
- * @param {Function} Vue - Vue library reference.
+ * @param {Function|Object} VueOrApp - Vue reference (Vue@2) or Vue instance (Vue@3).
  * @param {Object} options - Options object.
  * @returns {*}
  */
-const install = (Vue = null, options = {}) => {
+const install = (VueOrApp = null, options = {}) => {
+
+	/* throw error if VueOrApp argument is missing */
+	if(!VueOrApp) throw new Error(`[${PACKAGE_NAME}] Missing required argument! [VueOrApp]`);
+
+	/* throw error if VueOrApp argument is missing version property */
+	if(!VueOrApp.version) throw new Error(`[${PACKAGE_NAME}] Missing required argument property! [VueOrApp.version]`);
+	
+	/* throw error if Vue@1 is detected */
+	if(VueOrApp.version.startsWith("1.")) throw new Error(`[${PACKAGE_NAME}] Vue@1 is not supported!`);
 
 	/* merge default options object with supplied options object */
-	["directives", "attributes", "cache", "intersectionObserverOptions"].forEach(option => options[option] = Object.assign({}, DEFAULT_OPTIONS[option], options[option] || {}));
+	["directive", "attributes", "cache", "intersectionObserverOptions"].forEach(option => options[option] = Object.assign({}, DEFAULT_OPTIONS[option], options[option] || {}));
 	options = Object.assign({}, DEFAULT_OPTIONS, options);
 
 	/* loop over all directives options */
-	for(const option in options.directives) {
+	for(const option in options.directive) {
 
 		/* cast directive option to string */
-		options.directives[option] = options.directives[option].toString().trim().toLowerCase();
+		options.directive[option] = options.directive[option].toString().trim().toLowerCase();
 
 		/* throw error if directive option is not valid */
-		if(!PATTERN_ATTRIBUTE_NAME.test(options.directives[option])) throw new TypeError(`[${PACKAGE_NAME}] Option is not valid! [options.directives.${option}="${options.directives[option]}"]`);
-
-		/* remove starting `v-` from directive option */
-		options.directives[option] = options.directives[option].replace(PATTERN_VUE_DIRECTIVE, "");
+		if(!options.directive[option] || option === "name" && !PATTERN_ATTRIBUTE_NAME.test(options.directive[option])) throw new TypeError(`[${PACKAGE_NAME}] Option is not valid! [options.directives.${option}="${options.directives[option]}"]`);
 
 	}
+
+	/* remove starting `v-` from directive name option */
+	options.directive.name = options.directive.name.replace(PATTERN_VUE_DIRECTIVE, "");
 
 	/* loop over all attributes options */
 	for(const option in options.attributes) {
@@ -145,6 +154,9 @@ const install = (Vue = null, options = {}) => {
 
 	/* store function string reference */
 	const _fnc = "function";
+
+	/* store Vue@3 flag */
+	const isVue3 = /* !(VueOrApp instanceof Function) && */ VueOrApp.version.startsWith("3.");
 
 	/* check if fetch is available */
 	options._fetch = "fetch" in window && typeof fetch === _fnc;
@@ -694,13 +706,13 @@ const install = (Vue = null, options = {}) => {
 	};
 
 	/**
-	 * Bind hook function for Vue directive.
+	 * BeforeMount hook function for Vue directive.
 	 * @param {HTMLImageElement} node - Node that is binded with directive.
 	 * @param {Object} binding - Object containing directive properties.
 	 * @param {VNode} vnode - Virtual node created by Vue compiler.
 	 * @returns {*}
 	 */
-	const bind = (node = null, binding = null, vnode = null) => { // eslint-disable-line no-unused-vars
+	const beforeMount = (node = null, binding = null, vnode = null) => { // eslint-disable-line no-unused-vars
 
 		/* throw error if node argument is missing */
 		if(!node) throw new Error(`[${PACKAGE_NAME}] Missing required argument! [node]`);
@@ -717,11 +729,14 @@ const install = (Vue = null, options = {}) => {
 		/* set internal processed flag to image node */
 		node[FLAGS_ID].add("processed");
 
+		/* store vnode directives reference based on Vue version */
+		const directives = isVue3 ? vnode.dirs : vnode.data.directives;
+
 		/* throw error if image node has more than 1 directive */
-		if(vnode.data.directives.length > 1) throw new Error(`[${PACKAGE_NAME}] Node has more than 1 directive! [vnode.data.directives=${JSON.stringify(vnode.data.directives.map(directive => directive.name))}]`);
+		if(directives.length > 1) throw new Error(`[${PACKAGE_NAME}] Node has more than 1 directive! [${isVue3 ? "vnode.dirs" : "vnode.data.directives"}]`);
 
 		/* set internal sprite flag to image node */
-		if(vnode.data.directives.pop().name === options.directives.inlineSprite) node[FLAGS_ID].add("sprite");
+		if(!!directives[0].modifiers[options.directive.spriteModifierName]) node[FLAGS_ID].add("sprite"); // eslint-disable-line no-extra-boolean-cast
 
 		/* disable lazy processing of image node if intersection observer is not available */
 		if(!options._observer && node.dataset.src) {
@@ -738,11 +753,9 @@ const install = (Vue = null, options = {}) => {
 
 	};
 
-	/* define svg inline directive */
-	Vue.directive(options.directives.inline, { bind });
+	/* define vue svg inline directive */
+	VueOrApp.directive(options.directive.name, isVue3 ? { beforeMount } : { bind: beforeMount });
 
-	/* define svg inline sprite directive */
-	Vue.directive(options.directives.inlineSprite, { bind });
 };
 
 /* export Vue plugin */

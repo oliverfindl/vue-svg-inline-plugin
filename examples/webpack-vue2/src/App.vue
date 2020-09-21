@@ -1,6 +1,6 @@
 <template>
 	<div id="app" v-cloak>
-		<img v-svg-inline class="vue-logo-img" src="@/images/logo.svg" alt="Vue logo" />
+		<img v-svg-inline class="vue-logo-img" src="@/assets/logo.svg" alt="Vue logo" />
 		<HelloWorld message="Welcome to Your Vue.js App" />
 	</div>
 </template>

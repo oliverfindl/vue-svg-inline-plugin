@@ -7,20 +7,20 @@
 
 [Vue][vue] plugin for inline replacement of SVG images with actual content of SVG files.
 
-> ⚠ Works only with Vue@2.
-
 > ⚠ Reactive [Vue][vue] bindings won't be transfered to SVG replacement.
 
 > SVG files should be optimised beforehand (e.g.: using [SVGO](https://www.npmjs.com/package/svgo) or [SVGOMG](https://jakearchibald.github.io/svgomg/)).
 
 > Placeholder images should be optimised beforehand (e.g.: using [pngquant](https://pngquant.org/) or [TinyPNG](https://tinypng.com/) / [TinyJPG](https://tinyjpg.com/)).
 
+> Compatible with with [Vue][vue]@2 and [Vue][vue]@3.
+
 ---
 
 ## Table of contents:
 * [Installation](#installation)
 * [Usage](#usage)
-* [Directives](#directives)
+* [Directive](#directive)
 * [Lazy loading](#lazy-loading)
 * [Configuration](#configuration)
 * [Polyfills](#polyfills)
@@ -42,7 +42,7 @@ $ npm install vue-svg-inline-plugin --save
 $ yarn add vue-svg-inline-plugin
 ```
 
-### Browsers
+### Legacy browsers
 
 * [unpkg](https://unpkg.com/) [[package](https://www.unpkg.com/browse/vue-svg-inline-plugin/)]:
 ```html
@@ -70,49 +70,116 @@ $ yarn add vue-svg-inline-plugin
 
 ## Usage
 
-### [Webpack][webpack] based [Vue][vue] projects (e.g.: [Webpack][webpack] or [Vue CLI][vue-cli])
+### [Webpack][webpack] based [Vue][vue] projects (e.g.: [Webpack][webpack] or [Vue CLI][vue-cli]) and [Vite][vite] projects
 
 ```javascript
-// import plugin
+// Vue@2
+
+// import basic Vue app
+import Vue from "vue";
+import App from "./App.vue";
+
+// import Vue plugin
 import VueSvgInlinePlugin from "vue-svg-inline-plugin";
 
 // import polyfills for IE if you want to support it
 import "vue-svg-inline-plugin/src/polyfills";
 
-// use without options
+// use Vue plugin without options
 Vue.use(VueSvgInlinePlugin);
 
-// use with options
+// use Vue plugin with options
 VueSvgInlinePlugin.install(Vue, {
 	attributes: {
 		data: ["src"],
 		remove: ["alt"]
 	}
 });
+
+// initialize and mount Vue app
+new Vue({
+	render: h => h(App),
+}).$mount("#app");
+```
+
+```javascript
+// Vue@3
+
+// import basic Vue app
+import { createApp } from "vue";
+import App from "./App.vue";
+
+// import Vue plugin
+import VueSvgInlinePlugin from "vue-svg-inline-plugin";
+
+// import polyfills for IE if you want to support it
+import "vue-svg-inline-plugin/src/polyfills";
+
+// initialize Vue app
+const app = createApp(App);
+
+// use Vue plugin without options
+app.use(VueSvgInlinePlugin);
+
+// use Vue plugin with options
+app.use(VueSvgInlinePlugin, {
+	attributes: {
+		data: ["src"],
+		remove: ["alt"]
+	}
+});
+
+// mount Vue app
+app.mount("#app");
 ```
 
 ### Browsers
 
 ```javascript
-// use without options
+// Vue@2
+
+// use Vue plugin without options
 Vue.use(VueSvgInlinePlugin);
 
-// use with options
+// use Vue plugin with options
 VueSvgInlinePlugin.install(Vue, {
 	attributes: {
 		data: ["src"],
 		remove: ["alt"]
 	}
 });
+
+// initialize and mount Vue app
+new Vue({ /* options */ }).$mount("#app");
 ```
 
-## Directives
+```javascript
+// Vue@3
 
-> Directive keyword can be changed via [options](#configuration).
+// initialize Vue app
+const app = Vue.createApp({ /* options */ });
 
-### v-svg-inline directive
+// use Vue plugin without options
+app.use(VueSvgInlinePlugin);
 
-Basic usage with `v-svg-inline` directive:
+// use Vue plugin with options
+app.use(VueSvgInlinePlugin, {
+	attributes: {
+		data: ["src"],
+		remove: ["alt"]
+	}
+});
+
+// mount Vue app
+app.mount("#app");
+```
+
+## Directive
+
+> Directive name can be changed via [options](#configuration).
+
+**`v-svg-inline`** directive:
+
 ```html
 <img v-svg-inline class="icon" src="./images/example.svg" alt="example svg image" />
 ```
@@ -124,13 +191,11 @@ Replaces into:
 </svg>
 ```
 
-### v-svg-inline-sprite directive
+**`v-svg-inline`** directive with **`sprite`** modifier:
 
-Basic usage with `v-svg-inline-sprite` directive:
 ```html
-<img v-svg-inline-sprite class="icon" src="./images/example.svg" alt="example svg image" />
+<img v-svg-inline.sprite class="icon" src="./images/example.svg" alt="example svg image" />
 ```
-
 Replaces into:
 ```xml
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="icon" focusable="false" role="presentation" tabindex="-1">
@@ -156,9 +221,9 @@ This plugin supports lazy (down)loading of SVG files. To enable it, rename `src`
 
 ```javascript
 {
-	directives: {
-		inline: "v-svg-inline",
-		inlineSprite: "v-svg-inline-sprite"
+	directive: {
+		name: "v-svg-inline",
+		spriteModifierName: "sprite"
 	},
 	attributes: {
 		merge: ["class", "style"],
@@ -188,40 +253,40 @@ This plugin supports lazy (down)loading of SVG files. To enable it, rename `src`
 
 ### Explanation
 
-* **directives.inline:**  
-Defines directive keyword (lowercase string), which marks images you want to replace with inline SVGs.
+* **`directive.name`:**  
+Defines directive name (lowercase string), which marks images you want to replace with inline SVGs.
 
-* **directives.inlineSprite**  
-Defines directive keyword (lowercase string), which marks images you want to replace with inline SVGs using inline SVG sprites.
+* **`directive.spriteModifierName`:**  
+Defines directive modifier name (lowercase string), which together with `directive.name` marks images you want to replace with inline SVGs using inline SVG sprites.
 
-* **attributes.merge:**  
+* **`attributes.merge`:**  
 Array of attributes (lowercase strings) which should be merged.
 
-* **attributes.add:**  
+* **`attributes.add`:**  
 Array of attributes (objects with name (lowercase string) and value (string) properties), which should be added. If attribute already exists, it will be merged or skipped depending on mergeAttributes option.
 
-* **attributes.data:**  
+* **`attributes.data`:**  
 Array of attributes (lowercase strings) which should be transformed into data-attributes. If data-attribute already exists, it will be merged or skipped depending on mergeAttributes option.
 
-* **attributes.remove:**  
+* **`attributes.remove`:**  
 Array of attributes (lowercase strings) which should be removed.
 
-* **cache.version:**  
+* **`cache.version`:**  
 Defines cache version (lowercase string or number).
 
-* **cache.persistent:**  
+* **`cache.persistent`:**  
 Boolean. Cache downloaded SVG files into local storage.
 
-* **cache.removeRevisions:**  
+* **`cache.removeRevisions`:**  
 Boolean. Remove previous cache revisions from local storage.
 
-* **intersectionObserverOptions:**  
+* **`intersectionObserverOptions`:**  
 Intersection observer options object for processing image nodes. This option is not validated. [Official documentation](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API#Intersection_observer_options).
 
-* **axios:**  
+* **`axios`:**  
 Axios instance with pre-configured options. If omitted, new axios instance (if axios available) will be created. [Official documentation](https://github.com/axios/axios#creating-an-instance).
 
-* **xhtml:**  
+* **`xhtml`:**  
 Boolean. In XHTML mode attribute minimization is forbidden. Empty attributes are filled with their names to be XHTML-compliant (e.g.: disabled="disabled").
 
 ### Notices
@@ -239,11 +304,14 @@ Boolean. In XHTML mode attribute minimization is forbidden. Empty attributes are
 
 ## Examples
 
-* [browser example](https://github.com/oliverfindl/vue-svg-inline-plugin/tree/master/examples/browser)
-
-* [vue-cli example](https://github.com/oliverfindl/vue-svg-inline-plugin/tree/master/examples/vue-cli)
-
-* [webpack example](https://github.com/oliverfindl/vue-svg-inline-plugin/tree/master/examples/webpack)
+* [Vue][vue]@2:
+	* [browser example](https://github.com/oliverfindl/vue-svg-inline-plugin/tree/master/examples/browser-vue2)
+	* [vue-cli example](https://github.com/oliverfindl/vue-svg-inline-plugin/tree/master/examples/vue-cli-vue2)
+	* [webpack example](https://github.com/oliverfindl/vue-svg-inline-plugin/tree/master/examples/webpack-vue2)
+* [Vue][vue]@3:
+	* [browser example](https://github.com/oliverfindl/vue-svg-inline-plugin/tree/master/examples/browser-vue3)
+	* [vite example](https://github.com/oliverfindl/vue-svg-inline-plugin/tree/master/examples/vite-vue3) - Development mode not working due to plugin being loaded as local import instead of package. Production build works fine. **Feel free to submit PR.**
+	* [webpack example](https://github.com/oliverfindl/vue-svg-inline-plugin/tree/master/examples/webpack-vue3)
 
 ---
 
@@ -255,4 +323,5 @@ Boolean. In XHTML mode attribute minimization is forbidden. Empty attributes are
 [npm]: https://www.npmjs.com/package/vue-svg-inline-plugin
 [vue]: https://github.com/vuejs/vue
 [vue-cli]: https://github.com/vuejs/vue-cli
+[vite]: https://github.com/vitejs/vite
 [webpack]: https://github.com/webpack/webpack

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+		<link rel="icon" href="favicon.ico" />
+		<title>vue-svg-inline-plugin browser Vue@3 example</title>
+		<style>
+			#app[v-cloak] { display: none }
+			#app p:first-of-type { margin-bottom: 100vh; }
+			#app .logo { max-width: 10rem; }
+		</style>
+	</head>
+	<body>
+		<main id="app" v-cloak>
+			<p>
+				{{ message }}
+			</p>
+			<p>
+				Inline:<br /><br />
+				<img v-svg-inline class="logo img" src="images/logo.svg?0" alt="Vue logo 0" />
+				<br /><br /><br />
+				Inline lazy:<br /><br />
+				<img v-svg-inline class="logo img" data-src="images/logo.svg?1" alt="Vue logo 1" />
+				<br /><br /><br />
+				Inline sprite lazy:<br /><br />
+				<img v-svg-inline.sprite class="logo img" data-src="images/logo.svg?2" alt="Vue logo 1/2" />
+				<br /><br /><br />
+				Inline sprite lazy (same as above - testing cache):<br /><br />
+				<img v-svg-inline.sprite class="logo img" data-src="images/logo.svg?2" alt="Vue logo 2/2" />
+			</p>
+		</main>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.0.0/vue.global.prod.js"></script>
+		<script src="../../dist/vue-svg-inline-plugin-modern.min.js"></script>
+		<script>
+			"use strict";
+
+			/* create axios instance */
+			const axiosInstance = axios.create();
+
+			/* set default axios header - won't affect created instance above */
+			axios.defaults.headers.common["X-Test-Header"] = "test-header";
+
+			/* intialize Vue app */
+			const app = Vue.createApp({
+				data: () => ({
+					message: "↓↓↓ Scroll down and keep eye on DOM tree. ↓↓↓"
+				})
+			});
+
+			/* use Vue plugin */
+			app.use(VueSvgInlinePlugin, {
+				cache: {
+					version: "example"
+				},
+				axios: axiosInstance
+			});
+
+			/* mount Vue app */
+			app.mount("#app");
+		</script>
+	</body>
+</html>

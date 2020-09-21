@@ -5,7 +5,7 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
 		<link rel="icon" href="favicon.ico" />
-		<title>vue-svg-inline-plugin browser example</title>
+		<title>vue-svg-inline-plugin browser Vue@2 example</title>
 		<style>
 			#app[v-cloak] { display: none }
 			#app p:first-of-type { margin-bottom: 100vh; }
@@ -25,15 +25,15 @@
 				<img v-svg-inline class="logo img" data-src="images/logo.svg?1" alt="Vue logo 1" />
 				<br /><br /><br />
 				Inline sprite lazy:<br /><br />
-				<img v-svg-inline-sprite class="logo img" data-src="images/logo.svg?2" alt="Vue logo 1/2" />
+				<img v-svg-inline.sprite class="logo img" data-src="images/logo.svg?2" alt="Vue logo 1/2" />
 				<br /><br /><br />
 				Inline sprite lazy (same as above - testing cache):<br /><br />
-				<img v-svg-inline-sprite class="logo img" data-src="images/logo.svg?2" alt="Vue logo 2/2" />
+				<img v-svg-inline.sprite class="logo img" data-src="images/logo.svg?2" alt="Vue logo 2/2" />
 			</p>
 		</main>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.20.0/axios.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.12/vue.min.js"></script>
-		<script src="../../dist/vue-svg-inline-plugin.min.js"></script>
+		<script src="../../dist/vue-svg-inline-plugin-modern.min.js"></script>
 		<script>
 			"use strict";
 
@@ -43,7 +43,7 @@
 			/* set default axios header - won't affect created instance above */
 			axios.defaults.headers.common["X-Test-Header"] = "test-header";
 
-			/* initialize vue plugin */
+			/* use Vue plugin */
 			VueSvgInlinePlugin.install(Vue, {
 				cache: {
 					version: "example"
@@ -51,7 +51,7 @@
 				axios: axiosInstance
 			});
 
-			/* intialize vue app */
+			/* intialize and mount Vue app */
 			new Vue({
 				data: {
 					message: "↓↓↓ Scroll down and keep eye on DOM tree. ↓↓↓"

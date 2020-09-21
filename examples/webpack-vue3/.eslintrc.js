@@ -1,18 +1,15 @@
 "use strict";
 
 module.exports = {
+	"root": true,
 	"env": {
 		"browser": true,
 		"es2021": true
 	},
 	"extends": [
 		"eslint:recommended",
-		"plugin:vue/essential"
+		"plugin:vue/vue3-essential"
 	],
-	"globals": {
-		"IMPORT_POLYFILLS": "readonly",
-		"axios": "readonly"
-	},
 	"parserOptions": {
 		"ecmaVersion": 12,
 		"parser": "babel-eslint",

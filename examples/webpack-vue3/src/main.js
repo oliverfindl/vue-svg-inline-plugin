@@ -1,12 +1,19 @@
 "use strict";
 
-import Vue from "vue";
+/* import basic Vue app */
+import { createApp } from "vue";
 import App from "@/App.vue";
+import "@/index.scss";
 
+/* import Vue plugin */
 import VueSvgInlinePlugin from "../../../src";
 import "../../../src/polyfills";
 
-VueSvgInlinePlugin.install(Vue, {
+/* intialize Vue app */
+const app = createApp(App);
+
+/* use Vue plugin */
+app.use(VueSvgInlinePlugin, {
 	attributes: {
 		add: [{
 			name: "class",
@@ -20,8 +27,5 @@ VueSvgInlinePlugin.install(Vue, {
 	}
 });
 
-Vue.config.productionTip = false;
-
-new Vue({
-	render: h => h(App),
-}).$mount("#app");
+/* mount Vue app */
+app.mount("#app");

@@ -20,8 +20,7 @@ module.exports = {
 		library: "VueSvgInlinePlugin",
 		libraryExport: "default",
 		libraryTarget: "umd",
-		path: resolve(__dirname, "dist"),
-		publicPath: "/"
+		path: resolve(__dirname, "dist")
 	},
 	module: {
 		rules: [{
@@ -53,5 +52,8 @@ module.exports = {
 			"IMPORT_POLYFILLS": JSON.stringify(IMPORT_POLYFILLS)
 		}),
 		...IMPORT_POLYFILLS ? [ new BundleAnalyzerPlugin() ] : []
-	]
+	],
+	externals: {
+		vue: "Vue"
+	}
 };

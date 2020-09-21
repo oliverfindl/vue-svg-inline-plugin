@@ -16,8 +16,9 @@ const BABEL_PRESETS = [ [ "@babel/preset-env", {
 	corejs: 3
 } ] ];
 
-module.exports = {
+module.exports = (env = {}) => ({
 	entry: resolve(__dirname, "src/main.js"),
+	mode: env.prod ? "production" : "development",
 	output: {
 		filename: "javascript/[name].[hash:8].js",
 		chunkFilename: "javascript/[id].[chunkhash:8].js",
@@ -173,7 +174,7 @@ module.exports = {
 			filename: "index.html",
 			template: resolve(__dirname, "src/index.html"),
 			inject: true,
-			favicon: resolve(__dirname, "src/favicon.ico"),
+			favicon: resolve(__dirname, "src/assets/favicon.ico"),
 			base: PUBLIC_PATH,
 			minify: {
 				collapseInlineTagWhitespace: true,
@@ -196,5 +197,6 @@ module.exports = {
 			warnings: true
 		},
 		stats: "minimal"
-	}
-};
+	},
+	devtool: env.prod ? "source-map" : "eval-cheap-module-source-map"
+});
