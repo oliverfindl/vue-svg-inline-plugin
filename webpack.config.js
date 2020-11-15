@@ -13,7 +13,7 @@ const BABEL_PRESETS = IMPORT_POLYFILLS ? [ [ "@babel/preset-env", {
 } ] ] : [];
 
 module.exports = {
-	entry: resolve(__dirname, "src/index.js"),
+	entry: resolve(__dirname, "src"),
 	mode: "production",
 	output: {
 		filename: `vue-svg-inline-plugin${!IMPORT_POLYFILLS ? "-modern" : ""}.min.js`,
