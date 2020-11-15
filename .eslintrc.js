@@ -13,10 +13,14 @@ module.exports = {
 		"IMPORT_POLYFILLS": "readonly",
 		"axios": "readonly"
 	},
+	"parser": "@babel/eslint-parser",
 	"parserOptions": {
 		"ecmaVersion": 12,
-		"parser": "babel-eslint",
-		"sourceType": "module"
+		"sourceType": "module",
+		"requireConfigFile": false,
+		"babelOptions": {
+			"plugins": [ "babel-plugin-remove-template-literals-whitespace" ]
+		}
 	},
 	"plugins": [
 		"vue"
