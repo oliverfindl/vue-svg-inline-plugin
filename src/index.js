@@ -31,8 +31,8 @@ const DEFAULT_OPTIONS = {
 		spriteModifierName: "sprite"
 	},
 	attributes: {
-		merge: ["class", "style"],
-		add: [{
+		merge: [ "class", "style" ],
+		add: [ {
 			name: "focusable",
 			value: false
 		}, {
@@ -41,9 +41,9 @@ const DEFAULT_OPTIONS = {
 		}, {
 			name: "tabindex",
 			value: -1
-		}],
+		} ],
 		data: [],
-		remove: ["alt", "src", "data-src"]
+		remove: [ "alt", "src", "data-src" ]
 	},
 	cache: {
 		version: PACKAGE_VERSION,
@@ -485,7 +485,7 @@ const install = (VueOrApp = null, options = {}) => {
 					cache.set(file.path, file.content);
 
 					/* store cache map in local storage */
-					if(options._storage && options.cache.persistent) localStorage.setItem(CACHE_ID, JSON.stringify([...cache]));
+					if(options._storage && options.cache.persistent) localStorage.setItem(CACHE_ID, JSON.stringify([ ...cache ]));
 
 					/* resolve svg file object */
 					return resolve(file);
@@ -544,7 +544,7 @@ const install = (VueOrApp = null, options = {}) => {
 				const symbolAlreadyDefined = symbols.has(file.path);
 
 				/* generate id for symbol */
-				const id = `${SYMBOL_ID}-${symbolAlreadyDefined ? [...symbols].indexOf(file.path) : symbols.size}`;
+				const id = `${SYMBOL_ID}-${symbolAlreadyDefined ? [ ...symbols ].indexOf(file.path) : symbols.size}`;
 
 				/* create new symbol if symbol is not defined in symbol set */
 				if(!symbolAlreadyDefined) {
@@ -585,10 +585,10 @@ const install = (VueOrApp = null, options = {}) => {
 			const nodeAttributes = createAttributeMapFromNamedNodeMap(node.attributes); // img
 
 			/* merge attribute maps */
-			attributes = new Map([...fileAttributes, ...nodeAttributes]);
+			attributes = new Map([ ...fileAttributes, ...nodeAttributes ]);
 
 			/* store attribute names reference for attributes that should have unique values */
-			const uniqueAttributeValues = new Set(["class"]);
+			const uniqueAttributeValues = new Set([ "class" ]);
 
 			/* loop over all attributes to merge */
 			for(const attribute of options.attributes.merge) {
@@ -601,10 +601,10 @@ const install = (VueOrApp = null, options = {}) => {
 				if(options.xhtml && !fileValues.length && !nodeValues.length) continue;
 
 				/* merge attribute values */
-				const values = [...fileValues, ...nodeValues];
+				const values = [ ...fileValues, ...nodeValues ];
 
 				/* set attribute values into attribute map */
-				attributes.set(attribute, (uniqueAttributeValues.has(attribute) ? [...new Set(values)] : values).join(" ").trim());
+				attributes.set(attribute, (uniqueAttributeValues.has(attribute) ? [ ...new Set(values) ] : values).join(" ").trim());
 
 			}
 
@@ -627,12 +627,12 @@ const install = (VueOrApp = null, options = {}) => {
 					if(options.xhtml && !values.length && !oldValues.length) continue;
 
 					/* merge attribute values */
-					values = [...oldValues, ...values];
+					values = [ ...oldValues, ...values ];
 
 				}
 
 				/* set attribute values into attribute map */
-				attributes.set(attribute.name, (uniqueAttributeValues.has(attribute.name) ? [...new Set(values)] : values).join(" ").trim());
+				attributes.set(attribute.name, (uniqueAttributeValues.has(attribute.name) ? [ ...new Set(values) ] : values).join(" ").trim());
 
 			}
 
@@ -661,12 +661,12 @@ const install = (VueOrApp = null, options = {}) => {
 					if(options.xhtml && !values.length && !oldValues.length) continue;
 
 					/* merge attribute values */
-					values = [...oldValues, ...values];
+					values = [ ...oldValues, ...values ];
 
 				}
 
 				/* set data-attribute values into attribute map */
-				attributes.set(dataAttribute, (uniqueAttributeValues.has(attribute) ? [...new Set(values)] : values).join(" ").trim());
+				attributes.set(dataAttribute, (uniqueAttributeValues.has(attribute) ? [ ...new Set(values) ] : values).join(" ").trim());
 
 				/* add attribute to remove from attribute map into options.attributes.remove set if there is not already present */
 				if(!options.attributes.remove.has(attribute)) options.attributes.remove.add(attribute);
@@ -686,7 +686,7 @@ const install = (VueOrApp = null, options = {}) => {
 
 			/* return string representation of svg node with injected attributes */
 			return `
-				<svg${attributes.size ? ` ${[...attributes.keys()].filter(attribute => !!attribute).map(attribute => `${attribute}="${attributes.get(attribute)}"`).join(" ")}` : ""}>
+				<svg${attributes.size ? ` ${[ ...attributes.keys() ].filter(attribute => !!attribute).map(attribute => `${attribute}="${attributes.get(attribute)}"`).join(" ")}` : ""}>
 					${symbol}
 				</svg>
 			`;

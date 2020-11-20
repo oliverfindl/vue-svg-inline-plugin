@@ -91,8 +91,8 @@ Vue.use(VueSvgInlinePlugin);
 // use Vue plugin with options
 VueSvgInlinePlugin.install(Vue, {
 	attributes: {
-		data: ["src"],
-		remove: ["alt"]
+		data: [ "src" ],
+		remove: [ "alt" ]
 	}
 });
 
@@ -124,8 +124,8 @@ app.use(VueSvgInlinePlugin);
 // use Vue plugin with options
 app.use(VueSvgInlinePlugin, {
 	attributes: {
-		data: ["src"],
-		remove: ["alt"]
+		data: [ "src" ],
+		remove: [ "alt" ]
 	}
 });
 
@@ -144,8 +144,8 @@ Vue.use(VueSvgInlinePlugin);
 // use Vue plugin with options
 VueSvgInlinePlugin.install(Vue, {
 	attributes: {
-		data: ["src"],
-		remove: ["alt"]
+		data: [ "src" ],
+		remove: [ "alt" ]
 	}
 });
 
@@ -165,8 +165,8 @@ app.use(VueSvgInlinePlugin);
 // use Vue plugin with options
 app.use(VueSvgInlinePlugin, {
 	attributes: {
-		data: ["src"],
-		remove: ["alt"]
+		data: [ "src" ],
+		remove: [ "alt" ]
 	}
 });
 
@@ -226,8 +226,8 @@ This plugin supports lazy (down)loading of SVG files. To enable it, rename `src`
 		spriteModifierName: "sprite"
 	},
 	attributes: {
-		merge: ["class", "style"],
-		add: [{
+		merge: [ "class", "style" ],
+		add: [ {
 			name: "focusable",
 			value: false
 		}, {
@@ -236,9 +236,9 @@ This plugin supports lazy (down)loading of SVG files. To enable it, rename `src`
 		}, {
 			name: "tabindex",
 			value: -1
-		}],
+		} ],
 		data: [],
-		remove: ["alt", "src", "data-src"]
+		remove: [ "alt", "src", "data-src" ]
 	},
 	cache: {
 		version: "<PACKAGE_VERSION>",
