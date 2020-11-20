@@ -45,7 +45,7 @@ module.exports = {
 		}]
 	},
 	resolve: {
-        extensions: [ ".js", ".mjs" ]
+		extensions: [ ".js", ".mjs" ]
 	},
 	plugins: [
 		new DefinePlugin({
