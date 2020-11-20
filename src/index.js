@@ -352,7 +352,7 @@ const install = (VueOrApp = null, options = {}) => {
 	 * @param {String} string - String representation of node.
 	 * @returns {Map} Attribute map.
 	 */
-	const createAttributeMap = (string = "") => {
+	const createAttributeMapFromString = (string = "") => {
 
 		/* throw error if string argument is missing */
 		if(!string) throw new Error(`[${PACKAGE_NAME}] Missing required argument! [string]`);
@@ -389,6 +389,41 @@ const install = (VueOrApp = null, options = {}) => {
 			attributes.set(name, value ? value : (options.xhtml ? name : ""));
 
 		}
+
+		/* return attribute map */
+		return attributes;
+
+	};
+
+	/**
+	 * Create attribute map from named node attribute map.
+	 * @param {NamedNodeMap} namedNodeAttributeMap - Named node attribute map.
+	 * @returns {Map} Attribute map.
+	 */
+	const createAttributeMapFromNamedNodeMap = (namedNodeAttributeMap = null) => {
+		
+		/* throw error if namedNodeAttributeMap argument is missing */
+		if(!namedNodeAttributeMap) throw new Error(`[${PACKAGE_NAME}] Missing required argument! [namedNodeAttributeMap]`);
+
+		/* throw error if path argument is not valid */
+		if(!(namedNodeAttributeMap instanceof NamedNodeMap)) throw new TypeError(`[${PACKAGE_NAME}] Argument is not valid! [namedNodeAttributeMap]`);
+
+		/* transform named node attribute map into attribute map */
+		const attributes = new Map([ ...namedNodeAttributeMap ].map(({ name, value }) => {
+
+			/* parse attribute name */
+			name = (name || "").trim().toLowerCase();
+
+			/* throw error if attribute name is not valid */
+			if(!PATTERN_ATTRIBUTE_NAME.test(name)) throw new TypeError(`[${PACKAGE_NAME}] Attribute name is not valid! [attribute="${name}"]`);
+
+			/* parse attribute value */
+			value = (value || "").trim();
+
+			/* return array of attribute name and attribute value and handle xhtml transformation if xhtml option is enabled */
+			return [ name, value ? value : (options.xhtml ? name : "") ];
+
+		}));
 
 		/* return attribute map */
 		return attributes;
@@ -545,15 +580,9 @@ const install = (VueOrApp = null, options = {}) => {
 		/* inject attributes from attribute map into svg file content */
 		return file.content.replace(PATTERN_SVG_CONTENT, (svg, attributes, symbol) => { // eslint-disable-line no-unused-vars
 
-			/* transform matched attributes into attribute map */
-			// attributes = createAttributeMap(attributes);
-
-			/* store string representation of node reference and cast it to string */
-			const nodeHtml = node.outerHTML.toString().trim();
-
 			/* extract attribute maps */
-			const fileAttributes = createAttributeMap(attributes); // svg
-			const nodeAttributes = createAttributeMap(nodeHtml); // img
+			const fileAttributes = createAttributeMapFromString(attributes); // svg
+			const nodeAttributes = createAttributeMapFromNamedNodeMap(node.attributes); // img
 
 			/* merge attribute maps */
 			attributes = new Map([...fileAttributes, ...nodeAttributes]);
