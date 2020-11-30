@@ -263,10 +263,10 @@ Defines directive modifier name (lowercase string), which together with `directi
 Array of attributes (lowercase strings) which should be merged.
 
 * **`attributes.add`:**  
-Array of attributes (objects with name (lowercase string) and value (string) properties), which should be added. If attribute already exists, it will be merged or skipped depending on mergeAttributes option.
+Array of attributes (objects with name (lowercase string) and value (string) properties), which should be added. If attribute already exists, it will be merged or skipped depending on `attributes.merge` option.
 
 * **`attributes.data`:**  
-Array of attributes (lowercase strings) which should be transformed into data-attributes. If data-attribute already exists, it will be merged or skipped depending on mergeAttributes option.
+Array of attributes (lowercase strings) which should be transformed into data-attributes. If data-attribute already exists, it will be merged or skipped depending on `attributes.merge` option.
 
 * **`attributes.remove`:**  
 Array of attributes (lowercase strings) which should be removed.
