@@ -23,7 +23,7 @@ module.exports = {
 		path: resolve(__dirname, "dist")
 	},
 	module: {
-		rules: [{
+		rules: [ {
 			enforce: "pre",
 			test: /\.m?js$/i,
 			exclude: /(node_modules|bower_components)/,
@@ -42,7 +42,7 @@ module.exports = {
 				plugins: BABEL_PLUGINS,
 				presets: BABEL_PRESETS
 			}
-		}]
+		} ]
 	},
 	resolve: {
 		extensions: [ ".js", ".mjs" ]
