@@ -10,7 +10,7 @@
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"dependencies": {
-		"core-js": "^3.7.0",
+		"core-js": "^3.8.0",
 		"vue": "^2.6.12"
 	},
 	"devDependencies": {
@@ -18,7 +18,7 @@
 		"@vue/cli-plugin-eslint": "^4.5.9",
 		"@vue/cli-service": "^4.5.9",
 		"babel-eslint": "^10.1.0",
-		"eslint": "^7.13.0",
+		"eslint": "^7.14.0",
 		"eslint-plugin-vue": "^7.1.0",
 		"node-sass": "^5.0.0",
 		"sass-loader": "^10.1.0",
