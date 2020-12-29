@@ -13,7 +13,7 @@ declare namespace VueSvgInlinePlugin {
 		},
 		attributes?: {
 			merge?: string[],
-			add?: { name: string, value: string }[],
+			add?: { name: string, value: string | number }[],
 			data?: string[],
 			remove?: string[]
 		},
