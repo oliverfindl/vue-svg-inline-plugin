@@ -302,7 +302,7 @@ Boolean. In XHTML mode attribute minimization is forbidden. Empty attributes are
 
 * User-defined options are deep-merged with default options. Arrays are not concatenated.
 
-* Attributes options are executed in this order: **merge** > **add** > **data** > **remove**.
+* Attributes options are executed in this order: **clone > merge** > **add** > **data** > **remove**.
 
 ## Polyfills
 
