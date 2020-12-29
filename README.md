@@ -192,9 +192,13 @@ Replaces into:
 ```
 
 **`v-svg-inline`** directive with **`sprite`** modifier:
-
+> ⚠ Note, that for now, the `viewBox` property is not being applied on the `<svg>` element. <br>
+> This can cause issues when having icons differently sized in your UI. <br>
+> For the most icon-systems, you can add a `viewBox="0 0 24 24"` by yourself onto the `<img>`. 
 ```html
 <img v-svg-inline.sprite class="icon" src="./images/example.svg" alt="example svg image" />
+<!-- or -->
+<img v-svg-inline.sprite viewBox="0 0 24 24" class="icon" src="./images/example.svg" alt="example svg image" />
 ```
 Replaces into:
 ```xml
@@ -210,6 +214,7 @@ Replaces into:
 	</symbol>
 </svg>
 ```
+
 
 ## Lazy loading
 
