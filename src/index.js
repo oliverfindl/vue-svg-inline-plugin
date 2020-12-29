@@ -31,6 +31,7 @@ const DEFAULT_OPTIONS = {
 		spriteModifierName: "sprite"
 	},
 	attributes: {
+		clone: [ "viewbox" ],
 		merge: [ "class", "style" ],
 		add: [ {
 			name: "focusable",
@@ -568,7 +569,7 @@ const install = (VueOrApp = null, options = {}) => {
 
 				/* return symbol node usage reference */
 				return `
-					<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+					<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"${options.attributes.clone.size && (attributes = createAttributeMapFromString(attributes)) ? ` ${[ ...options.attributes.clone ].filter(attribute => !!attribute && attributes.has(attribute)).map(attribute => `${attribute}="${attributes.get(attribute)}"`).join(" ")}` : "" }>
 						<use xlink:href="#${id}" href="#${id}"></use>
 					</svg>
 				`;
