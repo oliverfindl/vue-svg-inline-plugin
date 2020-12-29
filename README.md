@@ -194,9 +194,9 @@ Replaces into:
 **`v-svg-inline`** directive with **`sprite`** modifier:
 > ~~⚠ Note, that for now, the `viewBox` property is not being applied on the `<svg>` link node.  
 This can cause issues when having icons differently sized in your UI.  
-For the most icon-systems, you can add a `viewBox="0 0 24 24"` by yourself onto the `<img>` node or use [`options.attributes.add` option](#configuration).~~
+For the most icon-systems, you can add a `viewBox="0 0 24 24"` by yourself onto the `<img>` node or use [`attributes.add` option](#configuration).~~
 
-> Fixed in version 2.1.0, use [`options.attributes.clone` option](#configuration).
+> Fixed in version 2.1.0, use [`attributes.clone` option](#configuration).
 
 ```html
 <img v-svg-inline.sprite class="icon" src="./images/example.svg" alt="example svg image" />
