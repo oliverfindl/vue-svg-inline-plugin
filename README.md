@@ -192,14 +192,14 @@ Replaces into:
 ```
 
 **`v-svg-inline`** directive with **`sprite`** modifier:
-> ⚠ Note, that for now, the `viewBox` property is not being applied on the `<svg>` link node.  
+> ~~⚠ Note, that for now, the `viewBox` property is not being applied on the `<svg>` link node.  
 This can cause issues when having icons differently sized in your UI.  
-For the most icon-systems, you can add a `viewBox="0 0 24 24"` by yourself onto the `<img>` node or use [`options.attributes.add` option](#configuration).
+For the most icon-systems, you can add a `viewBox="0 0 24 24"` by yourself onto the `<img>` node or use [`options.attributes.add` option](#configuration).~~
+
+> Fixed in version 2.1.0, use [`options.attributes.clone` option](#configuration).
 
 ```html
 <img v-svg-inline.sprite class="icon" src="./images/example.svg" alt="example svg image" />
-<!-- or -->
-<img v-svg-inline.sprite viewBox="0 0 24 24" class="icon" src="./images/example.svg" alt="example svg image" />
 ```
 Replaces into:
 ```xml
@@ -231,6 +231,7 @@ This plugin supports lazy (down)loading of SVG files. To enable it, rename `src`
 		spriteModifierName: "sprite"
 	},
 	attributes: {
+		clone: [ "viewbox" ],
 		merge: [ "class", "style" ],
 		add: [ {
 			name: "focusable",
@@ -263,6 +264,9 @@ Defines directive name (lowercase string), which marks images you want to replac
 
 * **`directive.spriteModifierName`:**  
 Defines directive modifier name (lowercase string), which together with `directive.name` marks images you want to replace with inline SVGs using inline SVG sprites.
+
+* **`attributes.clone`:**  
+Array of attributes (lowercase strings) which should be cloned into SVG link node if using inline SVG sprites.
 
 * **`attributes.merge`:**  
 Array of attributes (lowercase strings) which should be merged.
