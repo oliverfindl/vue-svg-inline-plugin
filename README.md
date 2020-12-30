@@ -203,7 +203,7 @@ For the most icon-systems, you can add a `viewBox="0 0 24 24"` by yourself onto 
 ```
 Replaces into:
 ```xml
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="icon" focusable="false" role="presentation" tabindex="-1">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="..." class="icon" focusable="false" role="presentation" tabindex="-1">
 	<use xlink:href="#svg-inline-plugin-sprite-<NUMBER>" href="#svg-inline-plugin-sprite-<NUMBER>"></use>
 </svg>
 <!-- ... -->
