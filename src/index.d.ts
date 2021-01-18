@@ -12,6 +12,7 @@ declare namespace VueSvgInlinePlugin {
 			spriteModifierName?: string
 		},
 		attributes?: {
+			clone?: string[],
 			merge?: string[],
 			add?: { name: string, value: string | number }[],
 			data?: string[],
