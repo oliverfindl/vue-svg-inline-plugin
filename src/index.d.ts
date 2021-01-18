@@ -1,41 +1,41 @@
-import { VueConstructor } from "vue";
-import { App } from "@vue/runtime-core/dist/runtime-core";
-import { AxiosInstance } from "axios";
+declare module "vue-svg-inline-plugin" {
 
-declare namespace VueSvgInlinePlugin {
+	import { VueConstructor as Vue2Constructor } from "vue";
+	import { App as Vue3App } from "@vue/runtime-core/dist/runtime-core";
+	import { AxiosInstance } from "axios";
 
-	type VueOrAppArgument = | VueConstructor | App;
-
-	interface OptionsArgument {
+	interface Options {
 		directive?: {
-			name?: string,
-			spriteModifierName?: string
-		},
+			name?: string;
+			spriteModifierName?: string;
+		};
 		attributes?: {
-			clone?: string[],
-			merge?: string[],
-			add?: { name: string, value: string | number }[],
-			data?: string[],
-			remove?: string[]
-		},
+			clone?: string[];
+			merge?: string[];
+			add?: { name: string; value: string | number }[];
+			data?: string[];
+			remove?: string[];
+		};
 		cache?: {
-			version?: string,
-			persistent?: boolean,
-			removeRevisions?: boolean
-		},
-		intersectionObserverOptions?: any,
-		axios?: AxiosInstance,
-		xhtml?: boolean
+			version?: string;
+			persistent?: boolean;
+			removeRevisions?: boolean;
+		};
+		intersectionObserverOptions?: any;
+		axios?: AxiosInstance;
+		xhtml?: boolean;
 	}
 
-	export type InstallFunction = (VueOrApp: VueOrAppArgument, options?: OptionsArgument) => any;
+	type InstallFunction = (app: | Vue2Constructor | Vue3App, options?: Options) => any;
+
+	type VueSvgInlinePlugin = | InstallFunction & { install?: InstallFunction } | { install: InstallFunction };
+
+	// const install: InstallFunction;
+
+	const _default: VueSvgInlinePlugin;
+
+	export { /* install, */ Options };
+
+	export default _default;
 
 }
-
-type VueSvgInlinePlugin =
-	| VueSvgInlinePlugin.InstallFunction & { install?: VueSvgInlinePlugin.InstallFunction }
-	| { install: VueSvgInlinePlugin.InstallFunction };
-
-declare const _default: VueSvgInlinePlugin;
-
-export default _default;

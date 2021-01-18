@@ -788,4 +788,5 @@ const install = (VueOrApp = null, options = {}) => {
 };
 
 /* export Vue plugin */
+// export { install };
 export default { install };
