@@ -98,12 +98,29 @@ const CORRECT_RESPONSE_STATUSES = new Set([
  */
 const install = (VueOrApp = null, options = {}) => {
 
+	/* store basic types references */
+	const _str = "string";
+	const _fnc = "function";
+	const _obj = "object";
+
 	/* throw error if VueOrApp argument is missing */
-	if(!VueOrApp) throw new Error(`[${PACKAGE_NAME}] Missing required argument! [VueOrApp]`);
+	if(!VueOrApp) throw new Error(`[${PACKAGE_NAME}] Required argument is missing! [VueOrApp]`);
+
+	/* throw error if VueOrApp argument is not valid */
+	if(![ _fnc, _obj ].includes(typeof VueOrApp)) throw new TypeError(`[${PACKAGE_NAME}] Required argument is not valid! [VueOrApp]`);
+
+	/* throw error if VueOrApp argument is missing directive method */
+	if(!VueOrApp.directive) throw new Error(`[${PACKAGE_NAME}] Required method is missing! [VueOrApp.directive]`);
+
+	/* throw error if VueOrApp.directive method is not valid */
+	if(typeof VueOrApp.directive !== _fnc) throw new TypeError(`[${PACKAGE_NAME}] Required method is not valid! [VueOrApp.directive]`);
 
 	/* throw error if VueOrApp argument is missing version property */
-	if(!VueOrApp.version) throw new Error(`[${PACKAGE_NAME}] Missing required argument property! [VueOrApp.version]`);
-	
+	if(!VueOrApp.version) throw new Error(`[${PACKAGE_NAME}] Required property is missing! [VueOrApp.version]`);
+
+	/* throw error if VueOrApp.version property is not valid */
+	if(typeof VueOrApp.version !== _str) throw new TypeError(`[${PACKAGE_NAME}] Required property is not valid! [VueOrApp.version]`);
+
 	/* throw error if Vue@1 is detected */
 	if(VueOrApp.version.startsWith("1.")) throw new Error(`[${PACKAGE_NAME}] Vue@1 is not supported!`);
 
@@ -152,9 +169,6 @@ const install = (VueOrApp = null, options = {}) => {
 
 	/* cast xhtml option to boolean */
 	options.xhtml = !!options.xhtml;
-
-	/* store function string reference */
-	const _fnc = "function";
 
 	/* store Vue@3 flag */
 	const isVue3 = /* !(VueOrApp instanceof Function) && */ VueOrApp.version.startsWith("3.");
@@ -310,7 +324,7 @@ const install = (VueOrApp = null, options = {}) => {
 	const createNode = (string = "") => {
 
 		/* throw error if string argument is missing */
-		if(!string) throw new Error(`[${PACKAGE_NAME}] Missing required argument! [string]`);
+		if(!string) throw new Error(`[${PACKAGE_NAME}] Required argument is missing! [string]`);
 
 		/* cast string argument to string */
 		string = string.toString().trim();
@@ -335,13 +349,13 @@ const install = (VueOrApp = null, options = {}) => {
 	const replaceNode = (node = null, newNode = null) => {
 
 		/* throw error if node argument is missing */
-		if(!node) throw new Error(`[${PACKAGE_NAME}] Missing required argument! [node]`);
+		if(!node) throw new Error(`[${PACKAGE_NAME}] Required argument is missing! [node]`);
 
 		/* throw error if newNode argument is missing */
-		if(!newNode) throw new Error(`[${PACKAGE_NAME}] Missing required argument! [newNode]`);
+		if(!newNode) throw new Error(`[${PACKAGE_NAME}] Required argument is missing! [newNode]`);
 
 		/* throw error if node argument is missing parentNode property */
-		if(!node.parentNode) throw new Error(`[${PACKAGE_NAME}] Missing required argument property! [node.parentNode]`);
+		if(!node.parentNode) throw new Error(`[${PACKAGE_NAME}] Required property is missing! [node.parentNode]`);
 
 		/* replace node with new node */
 		node.parentNode.replaceChild(newNode, node);
@@ -356,7 +370,7 @@ const install = (VueOrApp = null, options = {}) => {
 	const createAttributeMapFromString = (string = "") => {
 
 		/* throw error if string argument is missing */
-		if(!string) throw new Error(`[${PACKAGE_NAME}] Missing required argument! [string]`);
+		if(!string) throw new Error(`[${PACKAGE_NAME}] Required argument is missing! [string]`);
 
 		/* cast string argument to string */
 		string = string.toString().trim();
@@ -404,7 +418,7 @@ const install = (VueOrApp = null, options = {}) => {
 	const createAttributeMapFromNamedNodeMap = (namedNodeAttributeMap = null) => {
 		
 		/* throw error if namedNodeAttributeMap argument is missing */
-		if(!namedNodeAttributeMap) throw new Error(`[${PACKAGE_NAME}] Missing required argument! [namedNodeAttributeMap]`);
+		if(!namedNodeAttributeMap) throw new Error(`[${PACKAGE_NAME}] Required argument is missing! [namedNodeAttributeMap]`);
 
 		/* throw error if path argument is not valid */
 		if(!(namedNodeAttributeMap instanceof NamedNodeMap)) throw new TypeError(`[${PACKAGE_NAME}] Argument is not valid! [namedNodeAttributeMap]`);
@@ -442,7 +456,7 @@ const install = (VueOrApp = null, options = {}) => {
 		if(!options._fetch && !options._axios) throw new Error(`[${PACKAGE_NAME}] Feature is not supported by browser! [fetch || axios]`);
 
 		/* throw error if path argument is missing */
-		if(!path) throw new Error(`[${PACKAGE_NAME}] Missing required argument! [path]`);
+		if(!path) throw new Error(`[${PACKAGE_NAME}] Required argument is missing! [path]`);
 
 		/* cast path argument to string */
 		path = path.toString().trim();
@@ -509,13 +523,13 @@ const install = (VueOrApp = null, options = {}) => {
 	const parseSvgFile = (file = null, node = null) => {
 
 		/* throw error if file argument is missing */
-		if(!file) throw new Error(`[${PACKAGE_NAME}] Missing required argument! [file]`);
+		if(!file) throw new Error(`[${PACKAGE_NAME}] Required argument is missing! [file]`);
 
 		/* throw error if node argument is missing */
-		if(!node) throw new Error(`[${PACKAGE_NAME}] Missing required argument! [node]`);
+		if(!node) throw new Error(`[${PACKAGE_NAME}] Required argument is missing! [node]`);
 
 		/* throw error if file argument is missing path property */
-		if(!file.path) throw new Error(`[${PACKAGE_NAME}] Missing required argument property! [file.path]`);
+		if(!file.path) throw new Error(`[${PACKAGE_NAME}] Required property is missing! [file.path]`);
 
 		/* cast path property of file argument to string */
 		file.path = file.path.toString().trim();
@@ -524,7 +538,7 @@ const install = (VueOrApp = null, options = {}) => {
 		if(!PATTERN_SVG_FILENAME.test(file.path)) throw new TypeError(`[${PACKAGE_NAME}] Argument property is not valid! [file.path="${file.path}"]`);
 
 		/* throw error if file argument is missing content property */
-		if(!file.content) throw new Error(`[${PACKAGE_NAME}] Missing required argument property! [file.content]`);
+		if(!file.content) throw new Error(`[${PACKAGE_NAME}] Required property is missing! [file.content]`);
 
 		/* cast content property of file argument to string */
 		file.content = file.content.toString().trim();
@@ -533,7 +547,7 @@ const install = (VueOrApp = null, options = {}) => {
 		if(!PATTERN_SVG_CONTENT.test(file.content)) throw new TypeError(`[${PACKAGE_NAME}] Argument property is not valid! [file.content="${file.content}"]`);
 
 		/* throw error if node argument is missing outerHTML property */
-		if(!node.outerHTML) throw new Error(`[${PACKAGE_NAME}] Missing required argument property! [node.outerHTML]`);
+		if(!node.outerHTML) throw new Error(`[${PACKAGE_NAME}] Required property is missing! [node.outerHTML]`);
 
 		/* check if image node should be handled as svg inline sprite */
 		if(node[FLAGS_ID].has("sprite")) {
@@ -704,10 +718,10 @@ const install = (VueOrApp = null, options = {}) => {
 	const processImageNode = (node = null) => {
 
 		/* throw error if node argument is missing */
-		if(!node) throw new Error(`[${PACKAGE_NAME}] Missing required argument! [node]`);
+		if(!node) throw new Error(`[${PACKAGE_NAME}] Required argument is missing! [node]`);
 
 		/* throw error if node argument is missing data-src and src property */
-		if(!node.dataset.src && !node.src) throw new Error(`[${PACKAGE_NAME}] Missing required argument property! [node.data-src || node.src]`);
+		if(!node.dataset.src && !node.src) throw new Error(`[${PACKAGE_NAME}] Required property is missing! [node.data-src || node.src]`);
 
 		/* cast data-src and src properties of node argument argument to strings if defined */
 		if(node.dataset.src) node.dataset.src = node.dataset.src.toString().trim();
@@ -745,10 +759,10 @@ const install = (VueOrApp = null, options = {}) => {
 	const beforeMount = (node = null, binding = null, vnode = null) => { // eslint-disable-line no-unused-vars
 
 		/* throw error if node argument is missing */
-		if(!node) throw new Error(`[${PACKAGE_NAME}] Missing required argument! [node]`);
+		if(!node) throw new Error(`[${PACKAGE_NAME}] Required argument is missing! [node]`);
 
 		/* throw error if vnode argument is missing */
-		if(!vnode) throw new Error(`[${PACKAGE_NAME}] Missing required argument! [vnode]`);
+		if(!vnode) throw new Error(`[${PACKAGE_NAME}] Required argument is missing! [vnode]`);
 
 		/* create empty image node flag set if it is not already defined */
 		if(!node[FLAGS_ID]) node[FLAGS_ID] = new Set;
