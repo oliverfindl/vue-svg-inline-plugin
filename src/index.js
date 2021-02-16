@@ -6,18 +6,14 @@
 
 "use strict";
 
-/* import PACKAGE_NAME and PACKAGE_VERSION constants from package.json file */
-// This syntax removes banner in modern build.
-// import { name as PACKAGE_NAME, version as PACKAGE_VERSION } from "../package.json";
-
-/* import package name and version constants from package.json file */
-import { name, version } from "../package.json";
+/* import package.json file as PACKAGE_JSON constant */
+import PACKAGE_JSON from "../package.json";
 
 /* define PACKAGE_NAME constant */
-const PACKAGE_NAME = name;
+const PACKAGE_NAME = PACKAGE_JSON.name;
 
 /* define PACKAGE_VERSION constant */
-const PACKAGE_VERSION = version;
+const PACKAGE_VERSION = PACKAGE_JSON.version;
 
 /* import polyfills if requested */
 // It is not possible to perform conditional import, so we use require syntax instead.

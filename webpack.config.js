@@ -3,6 +3,7 @@
 const { resolve } = require("path");
 const { DefinePlugin } = require("webpack");
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
+const TerserPlugin = require("terser-webpack-plugin");
 
 const IMPORT_POLYFILLS = process.env.IMPORT_POLYFILLS | 0;
 
@@ -46,6 +47,14 @@ module.exports = {
 	},
 	resolve: {
 		extensions: [ ".js", ".mjs" ]
+	},
+	optimization: {
+		minimize: true,
+		minimizer: [
+			new TerserPlugin({
+				extractComments: false
+			})
+		]
 	},
 	plugins: [
 		new DefinePlugin({
