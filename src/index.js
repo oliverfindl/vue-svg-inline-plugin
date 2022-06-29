@@ -71,14 +71,14 @@ const SYMBOL_ID = `${PACKAGE_NAME}-sprite`; // + `-<NUMBER>` - will be added dyn
 /* define id for svg symbol container node */
 const CONTAINER_ID = `${SYMBOL_ID}-${CONTAINER_REF_ID}`;
 
-/* define all regular expression patterns */
-const PATTERN_SVG_FILENAME = /.+\.svg(?:[?#].*)?$/i;
-const PATTERN_SVG_CONTENT = /<svg(\s+[^>]+)?>([\s\S]+)<\/svg>/i;
-const PATTERN_ATTRIBUTES = /\s*([^\s=]+)[\s=]+(?:"([^"]*)"|'([^']*)')?\s*/g;
-const PATTERN_ATTRIBUTE_NAME = /^[a-z](?:[a-z0-9-:]*[a-z0-9])?$/i;
-const PATTERN_VUE_DIRECTIVE = /^v-/i;
-const PATTERN_WHITESPACE = /\s+/g;
-const PATTERN_TEMPLATE_LITERALS_WHITESPACE = /[\n\t]+/g;
+/* define all regular expressions */
+const REGEXP_SVG_FILENAME = /.+\.svg(?:[?#].*)?$/i;
+const REGEXP_SVG_CONTENT = /<svg(\s+[^>]+)?>([\s\S]+)<\/svg>/i;
+const REGEXP_ATTRIBUTES = /\s*([^\s=]+)[\s=]+(?:"([^"]*)"|'([^']*)')?\s*/g;
+const REGEXP_ATTRIBUTE_NAME = /^[a-z](?:[a-z0-9-:]*[a-z0-9])?$/i;
+const REGEXP_VUE_DIRECTIVE = /^v-/i;
+const REGEXP_WHITESPACE = /\s+/g;
+const REGEXP_TEMPLATE_LITERALS_WHITESPACE = /[\n\t]+/g;
 
 /* define correct response statuses */
 const CORRECT_RESPONSE_STATUSES = new Set([
@@ -131,12 +131,12 @@ const install = (VueOrApp = null, options = {}) => {
 		options.directive[option] = options.directive[option].toString().trim().toLowerCase();
 
 		/* throw error if directive option is not valid */
-		if(!options.directive[option] || option === "name" && !PATTERN_ATTRIBUTE_NAME.test(options.directive[option])) throw new TypeError(`[${PACKAGE_NAME}] Option is not valid! [options.directives.${option}="${options.directives[option]}"]`);
+		if(!options.directive[option] || option === "name" && !REGEXP_ATTRIBUTE_NAME.test(options.directive[option])) throw new TypeError(`[${PACKAGE_NAME}] Option is not valid! [options.directives.${option}="${options.directives[option]}"]`);
 
 	}
 
 	/* remove starting `v-` from directive name option */
-	options.directive.name = options.directive.name.replace(PATTERN_VUE_DIRECTIVE, "");
+	options.directive.name = options.directive.name.replace(REGEXP_VUE_DIRECTIVE, "");
 
 	/* loop over all attributes options */
 	for(const option in options.attributes) {
@@ -329,7 +329,7 @@ const install = (VueOrApp = null, options = {}) => {
 		if(!string.startsWith("<") || !string.endsWith(">")) throw new TypeError(`[${PACKAGE_NAME}] Argument is not valid! [string="${string}"]`);
 
 		/* remove unncessary whitespace from string argument */
-		string = string.replace(PATTERN_TEMPLATE_LITERALS_WHITESPACE, "");
+		string = string.replace(REGEXP_TEMPLATE_LITERALS_WHITESPACE, "");
 
 		/* return document fragment created from string argument */
 		return document.createRange().createContextualFragment(string);
@@ -375,14 +375,14 @@ const install = (VueOrApp = null, options = {}) => {
 		const attributes = new Map;
 
 		/* set last index of regexp */
-		PATTERN_ATTRIBUTES.lastIndex = 0;
+		REGEXP_ATTRIBUTES.lastIndex = 0;
 
 		/* parse attributes into attribute map */
 		let attribute;
-		while(attribute = PATTERN_ATTRIBUTES.exec(string)) { // eslint-disable-line no-cond-assign
+		while(attribute = REGEXP_ATTRIBUTES.exec(string)) { // eslint-disable-line no-cond-assign
 
 			/* check and fix last index of regexp */
-			if(attribute.index === PATTERN_ATTRIBUTES.lastIndex) PATTERN_ATTRIBUTES.lastIndex++;
+			if(attribute.index === REGEXP_ATTRIBUTES.lastIndex) REGEXP_ATTRIBUTES.lastIndex++;
 
 			/* store attribute name reference */
 			const name = (attribute[1] || "").trim().toLowerCase();
@@ -391,7 +391,7 @@ const install = (VueOrApp = null, options = {}) => {
 			if(!name || name.startsWith("<") || name.endsWith(">")) continue;
 
 			/* throw error if attribute name is not valid */
-			if(!PATTERN_ATTRIBUTE_NAME.test(name)) throw new TypeError(`[${PACKAGE_NAME}] Attribute name is not valid! [attribute="${name}"]`);
+			if(!REGEXP_ATTRIBUTE_NAME.test(name)) throw new TypeError(`[${PACKAGE_NAME}] Attribute name is not valid! [attribute="${name}"]`);
 
 			/* store attribute value reference */
 			const value = (attribute[2] || attribute[3] || "").trim();
@@ -426,7 +426,7 @@ const install = (VueOrApp = null, options = {}) => {
 			name = (name || "").trim().toLowerCase();
 
 			/* throw error if attribute name is not valid */
-			if(!PATTERN_ATTRIBUTE_NAME.test(name)) throw new TypeError(`[${PACKAGE_NAME}] Attribute name is not valid! [attribute="${name}"]`);
+			if(!REGEXP_ATTRIBUTE_NAME.test(name)) throw new TypeError(`[${PACKAGE_NAME}] Attribute name is not valid! [attribute="${name}"]`);
 
 			/* parse attribute value */
 			value = (value || "").trim();
@@ -458,7 +458,7 @@ const install = (VueOrApp = null, options = {}) => {
 		path = path.toString().trim();
 
 		/* throw error if path argument is not valid */
-		if(!PATTERN_SVG_FILENAME.test(path)) throw new TypeError(`[${PACKAGE_NAME}] Argument is not valid! [path="${path}"]`);
+		if(!REGEXP_SVG_FILENAME.test(path)) throw new TypeError(`[${PACKAGE_NAME}] Argument is not valid! [path="${path}"]`);
 
 		/* return promise */
 		return new Promise((resolve, reject) => {
@@ -531,7 +531,7 @@ const install = (VueOrApp = null, options = {}) => {
 		file.path = file.path.toString().trim();
 
 		/* throw error if path property of file argument is not valid */
-		if(!PATTERN_SVG_FILENAME.test(file.path)) throw new TypeError(`[${PACKAGE_NAME}] Argument property is not valid! [file.path="${file.path}"]`);
+		if(!REGEXP_SVG_FILENAME.test(file.path)) throw new TypeError(`[${PACKAGE_NAME}] Argument property is not valid! [file.path="${file.path}"]`);
 
 		/* throw error if file argument is missing content property */
 		if(!file.content) throw new Error(`[${PACKAGE_NAME}] Required property is missing! [file.content]`);
@@ -540,7 +540,7 @@ const install = (VueOrApp = null, options = {}) => {
 		file.content = file.content.toString().trim();
 
 		/* throw error if content property of file argument is not valid */
-		if(!PATTERN_SVG_CONTENT.test(file.content)) throw new TypeError(`[${PACKAGE_NAME}] Argument property is not valid! [file.content="${file.content}"]`);
+		if(!REGEXP_SVG_CONTENT.test(file.content)) throw new TypeError(`[${PACKAGE_NAME}] Argument property is not valid! [file.content="${file.content}"]`);
 
 		/* throw error if node argument is missing outerHTML property */
 		if(!node.outerHTML) throw new Error(`[${PACKAGE_NAME}] Required property is missing! [node.outerHTML]`);
@@ -549,7 +549,7 @@ const install = (VueOrApp = null, options = {}) => {
 		if(node[FLAGS_ID].has("sprite")) {
 
 			/* replace svg file content with symbol usage reference, which will be defined in svg symbol container node */
-			file.content = file.content.replace(PATTERN_SVG_CONTENT, (svg, attributes, symbol) => { // eslint-disable-line no-unused-vars
+			file.content = file.content.replace(REGEXP_SVG_CONTENT, (svg, attributes, symbol) => { // eslint-disable-line no-unused-vars
 
 				/* check if requested svg file path is already defined in symbol set */
 				const symbolAlreadyDefined = symbols.has(file.path);
@@ -589,7 +589,7 @@ const install = (VueOrApp = null, options = {}) => {
 		}
 
 		/* inject attributes from attribute map into svg file content */
-		return file.content.replace(PATTERN_SVG_CONTENT, (svg, attributes, symbol) => { // eslint-disable-line no-unused-vars
+		return file.content.replace(REGEXP_SVG_CONTENT, (svg, attributes, symbol) => { // eslint-disable-line no-unused-vars
 
 			/* extract attribute maps */
 			const fileAttributes = createAttributeMapFromString(attributes); // svg
@@ -605,8 +605,8 @@ const install = (VueOrApp = null, options = {}) => {
 			for(const attribute of options.attributes.merge) {
 
 				/* extract attribute values */
-				const fileValues = fileAttributes.has(attribute) ? fileAttributes.get(attribute).split(PATTERN_WHITESPACE).filter(value => !!value) : []; // svg
-				const nodeValues = nodeAttributes.has(attribute) ? nodeAttributes.get(attribute).split(PATTERN_WHITESPACE).filter(value => !!value) : []; // img
+				const fileValues = fileAttributes.has(attribute) ? fileAttributes.get(attribute).split(REGEXP_WHITESPACE).filter(value => !!value) : []; // svg
+				const nodeValues = nodeAttributes.has(attribute) ? nodeAttributes.get(attribute).split(REGEXP_WHITESPACE).filter(value => !!value) : []; // img
 
 				/* skip loop if xhtml option is enabled and there are not any values */
 				if(options.xhtml && !fileValues.length && !nodeValues.length) continue;
@@ -623,7 +623,7 @@ const install = (VueOrApp = null, options = {}) => {
 			for(const attribute of options.attributes.add) {
 
 				/* extract attribute values */
-				let values = attribute.value.split(PATTERN_WHITESPACE).filter(value => !!value);
+				let values = attribute.value.split(REGEXP_WHITESPACE).filter(value => !!value);
 
 				/* check if attribute is already defined in attribute map */
 				if(attributes.has(attribute.name)) {
@@ -632,7 +632,7 @@ const install = (VueOrApp = null, options = {}) => {
 					if(!options.attributes.merge.has(attribute.name)) throw new Error(`[${PACKAGE_NAME}] Can not add attribute, attribute already exists. [${attribute.name}]`);
 
 					/* extract attribute values */
-					const oldValues = attributes.get(attribute.name).split(PATTERN_WHITESPACE).filter(value => !!value);
+					const oldValues = attributes.get(attribute.name).split(REGEXP_WHITESPACE).filter(value => !!value);
 
 					/* skip loop if xhtml option is enabled and there are not any values */
 					if(options.xhtml && !values.length && !oldValues.length) continue;
@@ -654,7 +654,7 @@ const install = (VueOrApp = null, options = {}) => {
 				if(!attributes.has(attribute)) continue;
 
 				/* extract attribute values */
-				let values = attributes.get(attribute).split(PATTERN_WHITESPACE).filter(value => !!value);
+				let values = attributes.get(attribute).split(REGEXP_WHITESPACE).filter(value => !!value);
 
 				/* store data-attribute name reference */
 				const dataAttribute = `data-${attribute}`;
@@ -666,7 +666,7 @@ const install = (VueOrApp = null, options = {}) => {
 					if(!options.attributes.merge.has(dataAttribute)) throw new Error(`[${PACKAGE_NAME}] Can not transform attribute to data-attribute, data-attribute already exists. [${attribute}]`);
 
 					/* extract data-attribute values */
-					const oldValues = attributes.get(dataAttribute).split(PATTERN_WHITESPACE).filter(value => !!value);
+					const oldValues = attributes.get(dataAttribute).split(REGEXP_WHITESPACE).filter(value => !!value);
 
 					/* skip loop if xhtml option is enabled and there are not any values */
 					if(options.xhtml && !values.length && !oldValues.length) continue;
