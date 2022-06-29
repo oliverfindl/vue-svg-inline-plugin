@@ -9,11 +9,11 @@
 
 > ⚠ Reactive [Vue][vue] bindings won't be transfered to SVG replacement.
 
-> SVG files should be optimised beforehand (e.g.: using [SVGO](https://www.npmjs.com/package/svgo) or [SVGOMG](https://jakearchibald.github.io/svgomg/)).
+> SVG files should be optimized beforehand (e.g.: using [SVGO](https://www.npmjs.com/package/svgo) or [SVGOMG](https://jakearchibald.github.io/svgomg/)).
 
-> Placeholder images should be optimised beforehand (e.g.: using [pngquant](https://pngquant.org/) or [TinyPNG](https://tinypng.com/) / [TinyJPG](https://tinyjpg.com/)).
+> Placeholder images should be optimized beforehand (e.g.: using [pngquant](https://pngquant.org/) or [TinyPNG](https://tinypng.com/) / [TinyJPG](https://tinyjpg.com/)).
 
-> Compatible with with [Vue][vue]@2 and [Vue][vue]@3.
+> Compatible with [Vue][vue]@2 and [Vue][vue]@3.
 
 ---
 
