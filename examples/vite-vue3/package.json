@@ -1,17 +1,17 @@
 {
 	"name": "vite-vue3",
+	"private": true,
 	"version": "1.0.0",
 	"scripts": {
-		"start": "php -S 127.0.0.1:8080 -t dist",
 		"dev": "vite",
-		"build": "vite build"
+		"build": "vite build",
+		"preview": "vite preview"
 	},
 	"dependencies": {
-		"vue": "^3.0.5"
+		"vue": "^3.2.37"
 	},
 	"devDependencies": {
-		"@vue/compiler-sfc": "^3.0.5",
-		"sass": "^1.32.4",
-		"vite": "^1.0.0-rc.13"
+		"@vitejs/plugin-vue": "^2.3.3",
+		"vite": "^2.9.13"
 	}
 }

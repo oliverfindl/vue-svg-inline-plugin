@@ -1,9 +1,6 @@
-"use strict";
-
 /* import basic Vue app */
 import { createApp } from "vue";
 import App from "./App.vue";
-import "./index.scss";
 
 /* import Vue plugin */
 /* ! not working in dev mode ! */

@@ -1,17 +1,25 @@
-<template v-cloak>
+<script setup>
+// This starter template is using Vue 3 <script setup> SFCs
+// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
+import HelloWorld from "./components/HelloWorld.vue";
+</script>
+
+<template>
 	<img v-svg-inline class="vue-logo-img" src="./assets/logo.svg" alt="Vue logo" />
-	<HelloWorld message="Hello Vue 3.0 + Vite" />
+	<HelloWorld message="Hello Vue 3 + Vite" />
 </template>
 
-<script>
-"use strict";
+<style>
+#app {
+	font-family: Avenir, Helvetica, Arial, sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-align: center;
+	color: #2c3e50;
+	margin-top: 60px;
+}
 
-import HelloWorld from "./components/HelloWorld.vue";
-
-export default {
-	name: "App",
-	components: {
-		HelloWorld
-	}
-};
-</script>
+#app .vue-logo-img {
+	max-width: 10rem;
+}
+</style>
