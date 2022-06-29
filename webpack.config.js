@@ -2,13 +2,15 @@
 
 const { resolve } = require("path");
 const { DefinePlugin } = require("webpack");
-const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
+const ESLintPlugin = require("eslint-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
+const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 
 const IMPORT_POLYFILLS = process.env.IMPORT_POLYFILLS | 0;
 
 const BABEL_PLUGINS = [ "babel-plugin-remove-template-literals-whitespace" ];
 const BABEL_PRESETS = IMPORT_POLYFILLS ? [ [ "@babel/preset-env", {
+	debug: !!IMPORT_POLYFILLS,
 	useBuiltIns: "usage",
 	corejs: 3
 } ] ] : [];
@@ -25,17 +27,6 @@ module.exports = {
 	},
 	module: {
 		rules: [ {
-			enforce: "pre",
-			test: /\.m?js$/i,
-			exclude: /(node_modules|bower_components)/,
-			loader: "eslint-loader",
-			options: {
-				emitError: true,
-				emitWarning: true,
-				failOnError: true,
-				failOnWarning: true
-			}
-		}, {
 			test: /\.m?js$/i,
 			exclude: /(node_modules|bower_components)/,
 			loader: "babel-loader",
@@ -59,6 +50,9 @@ module.exports = {
 	plugins: [
 		new DefinePlugin({
 			"IMPORT_POLYFILLS": JSON.stringify(IMPORT_POLYFILLS)
+		}),
+		new ESLintPlugin({
+			files: [ "src/**/*.{js,mjs}" ]
 		}),
 		...IMPORT_POLYFILLS ? [ new BundleAnalyzerPlugin() ] : []
 	],
