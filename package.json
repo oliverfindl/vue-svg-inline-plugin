@@ -3,12 +3,13 @@
 	"version": "2.2.0",
 	"description": "Vue plugin for inline replacement of SVG images with actual content of SVG files.",
 	"main": "src/index.js",
+	"types": "src/index.d.ts",
 	"unpkg": "dist/vue-svg-inline-plugin.min.js",
 	"jsdelivr": "dist/vue-svg-inline-plugin.min.js",
 	"files": [
 		"index.js",
 		"dist/*.js",
-		"src/**/*.js"
+		"src/*.{js,d.ts}"
 	],
 	"directories": {
 		"example": "examples"

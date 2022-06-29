@@ -90,7 +90,7 @@ const CORRECT_RESPONSE_STATUSES = new Set([
  * Install method for Vue plugin.
  * @param {Function|Object} VueOrApp - Vue reference (Vue@2) or Vue instance (Vue@3).
  * @param {Object} options - Options object.
- * @returns {*}
+ * @returns {void}
  */
 const install = (VueOrApp = null, options = {}) => {
 
