@@ -319,7 +319,7 @@ Boolean. In XHTML mode attribute minimization is forbidden. Empty attributes are
 	* [webpack example](https://github.com/oliverfindl/vue-svg-inline-plugin/tree/master/examples/webpack-vue2)
 * [Vue][vue]@3:
 	* [browser example](https://github.com/oliverfindl/vue-svg-inline-plugin/tree/master/examples/browser-vue3)
-	* [vite example](https://github.com/oliverfindl/vue-svg-inline-plugin/tree/master/examples/vite-vue3) - Development mode not working due to plugin being loaded as local import instead of package. Production build works fine. **Feel free to submit PR.**
+	* [vite example](https://github.com/oliverfindl/vue-svg-inline-plugin/tree/master/examples/vite-vue3)
 	* [webpack example](https://github.com/oliverfindl/vue-svg-inline-plugin/tree/master/examples/webpack-vue3)
 
 ---
