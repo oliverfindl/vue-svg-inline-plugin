@@ -22,7 +22,7 @@ declare module "vue-svg-inline-plugin" {
 		xhtml?: boolean;
 	}
 
-	type InstallFunction = (app: any, options?: Options) => void;
+	type InstallFunction = (VueOrApp: any, options?: Options) => void;
 
 	type VueSvgInlinePlugin = (InstallFunction & { install?: InstallFunction }) | { install: InstallFunction };
 
