@@ -757,6 +757,9 @@ const install = (VueOrApp = null, options = {}) => {
 		/* throw error if node argument is missing */
 		if(!node) throw new Error(`[${PACKAGE_NAME}] Required argument is missing! [node]`);
 
+		/* throw error if node argument is not valid */
+		if(node.tagName !== "IMG") throw new Error(`[${PACKAGE_NAME}] Required argument is not valid! [node]`);
+
 		/* throw error if vnode argument is missing */
 		if(!vnode) throw new Error(`[${PACKAGE_NAME}] Required argument is missing! [vnode]`);
 
