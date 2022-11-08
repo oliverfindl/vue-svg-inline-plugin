@@ -724,24 +724,25 @@ const install = (VueOrApp = null, options = {}) => {
 		if(node.src) node.src = node.src.toString().trim();
 
 		/* fetch svg file */
-		fetchSvgFile(node.dataset.src || node.src)
+		if (node.tagName.toLocaleLowerCase() !== "svg")
+			fetchSvgFile(node.dataset.src || node.src)
 
-			/* process svg file object */
-			.then(file => {
+				/* process svg file object */
+				.then(file => {
 
-				/* parse svg file object */
-				const svgString = parseSvgFile(file, node);
+					/* parse svg file object */
+					const svgString = parseSvgFile(file, node);
 
-				/* create svg node */
-				const svgNode = createNode(svgString);
+					/* create svg node */
+					const svgNode = createNode(svgString);
 
-				/* replace image node with svg node */
-				replaceNode(node, svgNode);
+					/* replace image node with svg node */
+					replaceNode(node, svgNode);
 
-			})
+				})
 
-			/* catch errors */
-			.catch(error => console.error(`[${PACKAGE_NAME}] ${error.toString()}`)); // eslint-disable-line no-console
+				/* catch errors */
+				.catch(error => console.error(`[${PACKAGE_NAME}] ${error.toString()}`)); // eslint-disable-line no-console
 
 	};
 
@@ -758,7 +759,7 @@ const install = (VueOrApp = null, options = {}) => {
 		if(!node) throw new Error(`[${PACKAGE_NAME}] Required argument is missing! [node]`);
 
 		/* throw error if node argument is not valid */
-		if(node.tagName !== "IMG") throw new Error(`[${PACKAGE_NAME}] Required argument is not valid! [node]`);
+		if(node.tagName.toLocaleLowerCase() !== "svg") throw new Error(`[${PACKAGE_NAME}] Required argument is not valid! [node]`);
 
 		/* throw error if vnode argument is missing */
 		if(!vnode) throw new Error(`[${PACKAGE_NAME}] Required argument is missing! [vnode]`);
